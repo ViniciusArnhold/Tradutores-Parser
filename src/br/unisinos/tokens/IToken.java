@@ -5,5 +5,8 @@ package br.unisinos.tokens;
  */
 public interface IToken<TokenType> {
 
-    String value();
+    TokenType type();
+
+
+
 }
