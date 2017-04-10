@@ -62,15 +62,15 @@ public class Logger {
             log("ERROR", message);
         }
 
-        public void info(String message, String[] args) {
+        public void info(String message, String... args) {
             info(String.format(message, args));
         }
 
-        public void error(String message, String[] args) {
+        public void error(String message, String... args) {
             error(String.format(message, args));
         }
 
-        public void warn(String message, String[] args) {
+        public void warn(String message, String... args) {
             warn(String.format(message, args));
         }
     }

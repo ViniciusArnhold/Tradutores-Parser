@@ -154,6 +154,7 @@ public class MultiLineStringReader {
     public String readToEndOfLine() {
         StringBuilder sb = new StringBuilder(ultimaColuna - curColuna);
         int thisLinha = curLinha;
+        //noinspection ConstantConditions
         while (curLinha != thisLinha) {
             sb.append(nextChar());
         }
@@ -179,16 +180,15 @@ public class MultiLineStringReader {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MultiLineStringReader{");
-        sb.append("primeiraLinha=").append(primeiraLinha);
-        sb.append(", ultimaLinha=").append(ultimaLinha);
-        sb.append(", primeiraColuna=").append(primeiraColuna);
-        sb.append(", linhas=").append(linhas);
-        sb.append(", ultimaColuna=").append(ultimaColuna);
-        sb.append(", curLinha=").append(curLinha);
-        sb.append(", curColuna=").append(curColuna);
-        sb.append('}');
-        return sb.toString();
+        String sb = "MultiLineStringReader{" + "primeiraLinha=" + primeiraLinha +
+                ", ultimaLinha=" + ultimaLinha +
+                ", primeiraColuna=" + primeiraColuna +
+                ", linhas=" + linhas +
+                ", ultimaColuna=" + ultimaColuna +
+                ", curLinha=" + curLinha +
+                ", curColuna=" + curColuna +
+                '}';
+        return sb;
     }
 
     public class Point {

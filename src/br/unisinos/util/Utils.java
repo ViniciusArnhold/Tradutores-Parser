@@ -14,7 +14,7 @@ public class Utils {
 
     }
 
-    public static final <T> List<List<T>> split(List<T> list, T value) {
+    public static <T> List<List<T>> split(List<T> list, T value) {
         List<List<T>> lists = new ArrayList<>();
         int lastSplit = 0;
         boolean splited = false;
