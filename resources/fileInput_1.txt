@@ -1,0 +1,17 @@
+int x = 7;
+int y;
+//FILE_SEPARATION_LINE
+int x = 7 + 25 * 52;
+
+//FILE_SEPARATION_LINE
+if( x == 10 )
+
+//FILE_SEPARATION_LINE
+while( x != 0)
+
+//FILE_SEPARATION_LINE
+int x = 7.15 - 2.13;
+
+//FILE_SEPARATION_LINE
+//Comentário 1
+/* Comentário 2 */
