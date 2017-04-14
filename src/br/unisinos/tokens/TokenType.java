@@ -20,9 +20,24 @@ public enum TokenType {
 
     RELATIONAL_OP("Relational_Op", "<", "<=", "==", "!=", ">=", ">"),
 
+    STRING_LITERAL("string_literal", "abc"),
+
     ARITHMETIC_OP("Arith_Op", "+", "-", "*", "/"),
 
     EQUAL_OP("Equal_Op", "="),
+
+    L_PAREN("l_paren", "("),
+    R_PAREN("r_paren", ")"),
+
+    L_BRACKET("l_bracket", "["),
+    R_BRACKET("r_bracket", "]"),
+
+    L_BRACE("l_brace", "{"),
+    R_BRACE("r_brace", "}"),
+
+    COMMA("comma", ","),
+
+    SEMICOLON("semicolon", ";"),
 
     COMMENT("comment", "//", "/**/");
 
