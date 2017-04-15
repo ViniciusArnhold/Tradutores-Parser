@@ -103,7 +103,7 @@ public class MultiLineStringReader {
     }
 
     public String nextString(int size) throws IllegalArgumentException {
-        if (size < 1) throw new IllegalArgumentException("size is less than 1 " + size);
+        if (size < 0) throw new IllegalArgumentException("size is less than 0, " + size);
 
         char[] str = new char[size];
         int count = 0;

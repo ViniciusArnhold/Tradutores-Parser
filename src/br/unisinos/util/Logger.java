@@ -1,7 +1,10 @@
 package br.unisinos.util;
 
+import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vinicius.
@@ -24,21 +27,25 @@ public class Logger {
         LOGGER.error(message);
     }
 
-    public static void info(String message, String... args) {
+    public static void lineBreak() {
+        LOGGER.lineBreak();
+    }
+
+    public static void info(String message, Object... args) {
         LOGGER.info(message, args);
     }
 
-    public static void warn(String message, String... args) {
+    public static void warn(String message, Object... args) {
         LOGGER.warn(message, args);
     }
 
-    public static void error(String message, String... args) {
+    public static void error(String message, Object... args) {
         LOGGER.error(message, args);
     }
 
     private static class LoggerImpl {
 
-        private static final String LOG_FORMAT = "[%s] - %s : %s";
+        private static final String LOG_FORMAT = "[%s] - %s : ";
 
         private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -46,14 +53,20 @@ public class Logger {
             return TIME_FORMATTER.format(LocalDateTime.now());
         }
 
+        private void doLog(PrintStream out, String message, String logName) {
+            out.println(Arrays.stream(message.split(System.lineSeparator())).collect(
+                    Collectors.joining(System.lineSeparator() + String.format(LOG_FORMAT, logName, getFormatedTime()),
+                            String.format(LOG_FORMAT, logName, getFormatedTime()),
+                            "")));
+            out.flush();
+        }
+
         private void log(String logName, String message) {
-            System.out.println(String.format(LOG_FORMAT, logName, getFormatedTime(), message));
-            System.out.flush();
+            doLog(System.out, message, logName);
         }
 
         private void logErr(String logName, String message) {
-            System.err.println(String.format(LOG_FORMAT, logName, getFormatedTime(), message));
-            System.err.flush();
+            doLog(System.err, message, logName);
         }
 
         void info(String message) {
@@ -68,16 +81,20 @@ public class Logger {
             logErr("ERROR", message);
         }
 
-        public void info(String message, String... args) {
+        public void info(String message, Object... args) {
             info(String.format(message, args));
         }
 
-        public void error(String message, String... args) {
+        public void error(String message, Object... args) {
             error(String.format(message, args));
         }
 
-        public void warn(String message, String... args) {
+        public void warn(String message, Object... args) {
             warn(String.format(message, args));
+        }
+
+        public void lineBreak() {
+            System.out.println();
         }
     }
 }

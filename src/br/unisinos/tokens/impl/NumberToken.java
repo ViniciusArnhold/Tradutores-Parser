@@ -26,7 +26,7 @@ public class NumberToken extends Token {
 
     public static class Parser implements TokenParser<NumberToken> {
 
-        private static final Predicate<String> INT_PATTERN = Pattern.compile("^\\d+(.\\d+)?$").asPredicate();
+        private static final Predicate<String> INT_PATTERN = Pattern.compile("^\\d+$").asPredicate();
         private static final Predicate<String> DOUBLE_PATTERN = Pattern.compile("^\\d+(.\\d+)?$").asPredicate();
 
         @Override

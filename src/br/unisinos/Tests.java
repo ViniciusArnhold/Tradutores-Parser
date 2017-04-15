@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,27 +69,37 @@ public class Tests {
 
         List<List<String>> lists = Utils.split(Files.readAllLines(path), "//FILE_SEPARATION_LINE");
 
+        HashMap<String, List<Token>> map = new HashMap<>();
+
         for (List<String> list : lists) {
 
 
             MultiLineStringReader input = MultiLineStringReader.of(list);
 
             List<Token> tokens = new ArrayList<>();
-
-            Logger.info("Parsing " + list);
-
-
             while (input.hasMoreChars()) {
-                printState(tokens, input);
-                if(!input.hasMoreCharsOnSameLine() && input.hasMoreLines()) {
+                if (!input.hasMoreCharsOnSameLine() && input.hasMoreLines()) {
                     input.nextLine();
                 }
                 input.skipWhitespace();
                 tryParseAny(input, tokens);
             }
 
-            counter=0;
+            String text = list.stream().collect(Collectors.joining(System.lineSeparator()));
+            Logger.info("Parsed " + System.lineSeparator() + text);
+            Logger.info("Results "  + System.lineSeparator() +  tokens);
+            Logger.lineBreak();
+
+            map.put(text, tokens);
+            counter = 0;
         }
+
+        Logger.lineBreak();
+        Logger.lineBreak();
+        Logger.info("Finished Parsing");
+        Logger.info("Results");
+        Logger.warn(map.toString());
+
 
     }
 
