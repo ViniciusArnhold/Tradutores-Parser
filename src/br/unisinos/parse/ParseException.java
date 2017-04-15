@@ -9,8 +9,8 @@ import java.util.Arrays;
  */
 public class ParseException extends RuntimeException {
 
-    public ParseException(String errorLine, int charNum) {
-        super(errorLine + System.lineSeparator() + generateErrorLine(charNum));
+    public ParseException(String message, String errorLine, int charNum) {
+        super(String.format("%s%s%s%s%s", message, System.lineSeparator(), errorLine, System.lineSeparator(), generateErrorLine(charNum)));
     }
 
     public ParseException(Exception e) {
@@ -23,4 +23,6 @@ public class ParseException extends RuntimeException {
         str[num - 1] = '^';
         return new String(str);
     }
+
+
 }

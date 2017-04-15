@@ -71,6 +71,7 @@ public class Tests {
 
         HashMap<String, List<Token>> map = new HashMap<>();
 
+
         for (List<String> list : lists) {
 
 
@@ -87,7 +88,7 @@ public class Tests {
 
             String text = list.stream().collect(Collectors.joining(System.lineSeparator()));
             Logger.info("Parsed " + System.lineSeparator() + text);
-            Logger.info("Results "  + System.lineSeparator() +  tokens);
+            Logger.info("Results " + System.lineSeparator() + tokens);
             Logger.lineBreak();
 
             map.put(text, tokens);
@@ -98,7 +99,7 @@ public class Tests {
         Logger.lineBreak();
         Logger.info("Finished Parsing");
         Logger.info("Results");
-        Logger.warn(map.toString());
+        Logger.warn(String.valueOf(map.entrySet().stream().map(e -> e.getKey() + System.lineSeparator() + e.getValue()).collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()))));
 
 
     }

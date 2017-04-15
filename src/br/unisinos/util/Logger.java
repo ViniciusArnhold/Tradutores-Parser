@@ -55,10 +55,10 @@ public class Logger {
 
         private void doLog(PrintStream out, String message, String logName) {
             out.println(Arrays.stream(message.split(System.lineSeparator())).collect(
-                    Collectors.joining(System.lineSeparator() + String.format(LOG_FORMAT, logName, getFormatedTime()),
-                            String.format(LOG_FORMAT, logName, getFormatedTime()),
-                            "")));
-            out.flush();
+                    Collectors.joining(System.lineSeparator() + "[" + logName + "]" + " - " + getFormatedTime() + " : ",
+                            "[" + logName + "]" + " - " + getFormatedTime() + " : ", "")));
+            System.out.flush();
+            System.err.flush();
         }
 
         private void log(String logName, String message) {
@@ -70,15 +70,15 @@ public class Logger {
         }
 
         void info(String message) {
-            log("INFO", message);
+            log((char) 27 + "[34mINFO" + (char) 27 + "[0m", message);
         }
 
         void warn(String message) {
-            log("WARN", message);
+            log((char) 27 + "[33mWARN" + (char) 27 + "[0m", message);
         }
 
         void error(String message) {
-            logErr("ERROR", message);
+            log((char) 27 + "[31mERROR" + (char) 27 + "[0m", message);
         }
 
         public void info(String message, Object... args) {

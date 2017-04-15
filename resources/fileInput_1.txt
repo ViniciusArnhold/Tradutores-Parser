@@ -11,3 +11,4 @@ int x = 7.15 - 2.13;
 //FILE_SEPARATION_LINE
 //Comentário 1
 /* Comentário 2 */
+//FILE_SEPARATION_LINE

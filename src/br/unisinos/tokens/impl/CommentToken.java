@@ -21,7 +21,7 @@ public class CommentToken extends Token {
         @Override
         public CommentToken parse(MultiLineStringReader input) {
             MultiLineStringReader.Point inicio = input.mark();
-            if(!input.hasMoreChars(2)) {
+            if (!input.hasMoreChars(2)) {
                 return null;
             }
             String inicioToken = input.nextString(2);
@@ -32,10 +32,7 @@ public class CommentToken extends Token {
                 StringBuilder sb = new StringBuilder("/* ");
                 do {
                     if (!input.hasMoreChars()) {
-                        throw new ParseException("Reached end of file while expecting end of comment."
-                                + System.lineSeparator()
-                                + input.currentLine(),
-                                input.curPos());
+                        throw new ParseException("Reached end of file while expecting end of comment.", input.currentLine(), input.curPos());
                     }
                     sb.append(input.nextChar());
 

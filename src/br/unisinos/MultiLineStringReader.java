@@ -114,7 +114,9 @@ public class MultiLineStringReader {
     }
 
     public String readToEndOfLine() {
-        return this.linhas.get(curLinha).substring(curColuna);
+        String ret =  this.linhas.get(curLinha).substring(curColuna);
+        nextLine();
+        return ret;
     }
 
     public String peekString() {

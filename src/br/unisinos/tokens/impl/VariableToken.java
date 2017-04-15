@@ -32,10 +32,10 @@ public class VariableToken extends Token {
             MultiLineStringReader.Point point = input.mark();
             ReservedWordToken reservedWordToken = new ReservedWordToken.Parser().parse(input);
             if (reservedWordToken != null) {
-                throw new ParseException("Expected a variable but found a reserved word", input.curPos() - 1);
+                throw new ParseException("Expected a variable but found a reserved word", input.currentLine(), input.curPos() - 1);
             }
             StringBuilder sb = new StringBuilder();
-            while(input.hasMoreCharsOnSameLine() && !Character.isWhitespace(input.peek()) && Character.isLetter(input.peek())) {
+            while (input.hasMoreCharsOnSameLine() && !Character.isWhitespace(input.peek()) && Character.isLetter(input.peek())) {
                 sb.append(input.nextChar());
             }
             String text = sb.toString();
