@@ -52,7 +52,8 @@ public class MultiLineStringReader {
     }
 
     public boolean hasMoreChars() {
-        return this.curColuna < ultimaColuna || hasMoreLines();
+        // by EPJ: This modification prevents invalid states when a file is empty.
+        return (this.curColuna < ultimaColuna || hasMoreLines()) && (this.linhas.size() > 0);
     }
 
     public boolean hasMoreChars(@SuppressWarnings("SameParameterValue") int count) {

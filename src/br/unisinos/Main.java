@@ -64,17 +64,19 @@ class Main {
     }
 
     public static void main(String... args) throws IOException {
+        // Arguments processing
         if (args.length == 0) {
             Logger.error(USAGE);
         }
         Logger.info("Program called with " + "'" + Arrays.toString(args) + "'");
-        boolean isFull = args[0].equalsIgnoreCase("--full");
+        boolean isFull = (args.length > 0) && args[0].equalsIgnoreCase("--full");
 
         String[] files = Arrays.copyOfRange(args, isFull ? 1 : 0, args.length);
         if (files.length == 0) {
             Logger.error("No file specifed" + System.lineSeparator() + USAGE);
         }
 
+        // Check file's consistency
         for (String file : files) {
             Path path = Paths.get(file);
             if (Files.notExists(path)) {
@@ -95,17 +97,16 @@ class Main {
             Logger.warn("Parsing file: " + path.toAbsolutePath());
             List<Token> tokens = new ArrayList<>();
             for (List<String> list : Utils.split(Files.readAllLines(path))) {
-                if (list.isEmpty()) {
-                    Logger.warn("Found empty file, skipping.");
-                }
-                Logger.warn("Parsing: ");
-                Logger.info(list.stream().collect(Collectors.joining(System.lineSeparator())));
 
                 MultiLineStringReader input = MultiLineStringReader.of(list);
 
                 if (!input.hasMoreChars()) {
                     Logger.warn("Found empty file, skipping.");
+                    continue;
                 }
+                // by EPJ: Moved here to show only if the file is not empty!
+                Logger.warn("Parsing:");
+                Logger.info(list.stream().collect(Collectors.joining(System.lineSeparator())));
 
                 tokens = new ArrayList<>();
                 while (input.hasMoreChars()) {
@@ -123,10 +124,13 @@ class Main {
 
             Logger.lineBreak();
             Logger.info("Finished Parsing");
-            Logger.info(tokens.toString());
-            Logger.info(System.lineSeparator());
-
-
+            if (tokens.isEmpty())
+                Logger.info("No token for empty files.");
+            else
+            {
+                Logger.info(tokens.toString());
+                Logger.info(System.lineSeparator());
+            }
         }
 
         Logger.lineBreak();

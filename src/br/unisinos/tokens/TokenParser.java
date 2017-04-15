@@ -11,6 +11,7 @@ import java.util.Optional;
  */
 public interface TokenParser<T extends Token> {
 
+    // Because the method tryParse can return no token the Optional concept was used.
     Optional<T> tryParse(MultiLineStringReader input);
 
 }
