@@ -9,7 +9,9 @@ import br.unisinos.util.ParserUtils;
 import java.util.Optional;
 
 /**
- * Created by first on 10/04/2017.
+ * Created by first.
+ *
+ * @since ${PROJECT_VERSION}
  */
 public abstract class SeparatorToken extends Token {
 

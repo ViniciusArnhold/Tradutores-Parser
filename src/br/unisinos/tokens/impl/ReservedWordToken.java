@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ReservedWordToken extends Token {
 
 
-    protected ReservedWordToken(Object value) {
+    private ReservedWordToken(Object value) {
         super(TokenType.RESERVED_WORD, value);
     }
 

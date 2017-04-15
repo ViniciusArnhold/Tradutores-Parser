@@ -8,7 +8,9 @@ import br.unisinos.tokens.TokenType;
 import java.util.Optional;
 
 /**
- * Created by first on 10/04/2017.
+ * Created by first.
+ *
+ * @since ${PROJECT_VERSION}
  */
 public class StringLiteralToken extends Token {
     protected StringLiteralToken(String value) {

@@ -14,7 +14,7 @@ import java.util.Optional;
  * @since ${PROJECT_VERSION}
  */
 public class EqualOperator extends Token {
-    EqualOperator(Object value) {
+    private EqualOperator(Object value) {
         super(TokenType.EQUAL_OP, value);
     }
 

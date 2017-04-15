@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class CommentToken extends Token {
 
-    protected CommentToken(Object value) {
+    private CommentToken(Object value) {
         super(TokenType.COMMENT, value);
     }
 

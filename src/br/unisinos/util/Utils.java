@@ -14,12 +14,12 @@ public class Utils {
 
     }
 
-    public static <T> List<List<T>> split(List<T> list, T value) {
+    public static <T> List<List<T>> split(List<T> list) {
         List<List<T>> lists = new ArrayList<>();
         int lastSplit = 0;
         boolean splited = false;
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(value)) {
+            if (list.get(i).equals("//FILE_SEPARATION_LINE")) {
                 lists.add(list.subList(lastSplit, i));
                 lastSplit = i + 1;
                 splited = true;

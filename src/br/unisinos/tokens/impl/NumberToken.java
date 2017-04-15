@@ -17,11 +17,11 @@ import java.util.regex.Pattern;
  */
 public class NumberToken extends Token {
 
-    NumberToken(Double value) {
+    private NumberToken(Double value) {
         super(TokenType.NUMERIC_VALUE, value);
     }
 
-    NumberToken(Integer value) {
+    private NumberToken(Integer value) {
         super(TokenType.NUMERIC_VALUE, value);
     }
 

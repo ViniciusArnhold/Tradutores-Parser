@@ -19,22 +19,20 @@ public class VariableToken extends Token {
     private static final HashMap<String, Integer> VARIABLES = new HashMap<>();
     private static volatile int nextID = 1;
 
-    private final String text;
-
-    protected VariableToken(String text) {
+    private VariableToken(String text) {
         super(TokenType.VARIABLE, VARIABLES.computeIfAbsent(text, (t) -> nextID++));
-        this.text = text;
     }
 
     public static class Parser implements TokenParser<VariableToken> {
 
         @Override
-        public Optional<VariableToken> tryParse(MultiLineStringReader input) {
+        public Optional<VariableToken> tryParse(final MultiLineStringReader input) {
             MultiLineStringReader.Point point = input.mark();
-            Optional<ReservedWordToken> reservedWordToken = new ReservedWordToken.Parser().tryParse(input);
-            if (reservedWordToken.isPresent()) {
+
+            new ReservedWordToken.Parser().tryParse(input).ifPresent(t -> {
                 throw new ParseException("Expected a variable but found a reserved word", input.currentLine(), input.curPos() - 1);
-            }
+            });
+
             StringBuilder sb = new StringBuilder();
             while (input.hasMoreCharsOnSameLine() && !Character.isWhitespace(input.peek()) && Character.isLetter(input.peek())) {
                 sb.append(input.nextChar());

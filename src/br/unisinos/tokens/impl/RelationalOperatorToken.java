@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class RelationalOperatorToken extends Token {
 
-    protected RelationalOperatorToken(Object value) {
+    private RelationalOperatorToken(Object value) {
         super(TokenType.RELATIONAL_OP, value);
     }
 

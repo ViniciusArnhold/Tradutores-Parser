@@ -15,7 +15,7 @@ import static br.unisinos.tokens.TokenType.ARITHMETIC_OP;
  * @since ${PROJECT_VERSION}
  */
 public class ArithmeticOperatorToken extends Token {
-    protected ArithmeticOperatorToken(Object value) {
+    private ArithmeticOperatorToken(Object value) {
         super(ARITHMETIC_OP, value);
     }
 

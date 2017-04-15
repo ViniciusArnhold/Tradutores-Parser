@@ -34,11 +34,11 @@ public class MultiLineStringReader {
         return new MultiLineStringReader(Files.readAllLines(path));
     }
 
-    public static MultiLineStringReader of(String str) throws IOException {
+    public static MultiLineStringReader of(String str) {
         return new MultiLineStringReader(Arrays.asList(str.split(System.lineSeparator())));
     }
 
-    static MultiLineStringReader of(List<String> lists) throws IOException {
+    static MultiLineStringReader of(List<String> lists) {
         return new MultiLineStringReader(lists);
     }
 
@@ -55,7 +55,7 @@ public class MultiLineStringReader {
         return this.curColuna < ultimaColuna || hasMoreLines();
     }
 
-    public boolean hasMoreChars(int count) {
+    public boolean hasMoreChars(@SuppressWarnings("SameParameterValue") int count) {
         return remainingChars() >= count;
     }
 
@@ -64,7 +64,7 @@ public class MultiLineStringReader {
     }
 
     //Count operations
-    int remainingChars() {
+    private int remainingChars() {
         Point p = mark();
         int count = 0;
         while (this.hasMoreChars()) {
@@ -199,7 +199,7 @@ public class MultiLineStringReader {
                 '}';
     }
 
-    public class Point {
+    public static class Point {
         private final int linha;
         private final int coluna;
 

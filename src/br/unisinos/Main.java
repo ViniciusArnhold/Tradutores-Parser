@@ -8,7 +8,6 @@ import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @since ${PROJECT_VERSION}
  */
-public class Main {
+class Main {
 
     private static final TokenParser<? extends Token> arithParser = new ArithmeticOperatorToken.Parser();
     private static final TokenParser<? extends Token> commentParser = new CommentToken.Parser();
@@ -62,7 +61,7 @@ public class Main {
         PARSERS = Collections.unmodifiableList(hParsers);
     }
 
-    public static void main(String... args) throws URISyntaxException, IOException {
+    public static void main(String... args) throws IOException {
         if (args.length == 0) {
             Logger.error(USAGE);
         }
@@ -93,7 +92,7 @@ public class Main {
             Logger.lineBreak();
             Logger.warn("Parsing file: " + path.toAbsolutePath());
             List<Token> tokens = new ArrayList<>();
-            for (List<String> list : Utils.split(Files.readAllLines(path), "//FILE_SEPARATION_LINE")) {
+            for (List<String> list : Utils.split(Files.readAllLines(path))) {
                 Logger.info("Parsing: ");
                 Logger.info(list.stream().collect(Collectors.joining(System.lineSeparator())));
 
