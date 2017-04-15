@@ -2,6 +2,8 @@ package br.unisinos.tokens;
 
 import br.unisinos.MultiLineStringReader;
 
+import java.util.Optional;
+
 /**
  * Created by Vinicius.
  *
@@ -9,6 +11,6 @@ import br.unisinos.MultiLineStringReader;
  */
 public interface TokenParser<T extends Token> {
 
-    T parse(MultiLineStringReader input);
+    Optional<T> tryParse(MultiLineStringReader input);
 
 }

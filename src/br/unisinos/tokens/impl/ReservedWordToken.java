@@ -5,6 +5,8 @@ import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 
+import java.util.Optional;
+
 /**
  * Created by Vinicius.
  *
@@ -20,7 +22,7 @@ public class ReservedWordToken extends Token {
     public static class Parser implements TokenParser<ReservedWordToken> {
 
         @Override
-        public ReservedWordToken parse(MultiLineStringReader input) {
+        public Optional<ReservedWordToken> tryParse(MultiLineStringReader input) {
             MultiLineStringReader.Point point = input.mark();
             StringBuilder sb = new StringBuilder();
             while (input.hasMoreCharsOnSameLine() && Character.isLetter(input.peek())) {
@@ -29,9 +31,9 @@ public class ReservedWordToken extends Token {
             String text = sb.toString();
             if (text.length() == 0 || !TokenType.RESERVED_WORD.possibleValues().contains(text)) {
                 input.moveTo(point);
-                return null;
+                return Optional.empty();
             }
-            return new ReservedWordToken(text);
+            return Optional.of(new ReservedWordToken(text));
         }
     }
 }

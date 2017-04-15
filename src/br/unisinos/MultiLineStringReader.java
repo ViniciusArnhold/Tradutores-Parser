@@ -13,6 +13,7 @@ import java.util.Objects;
  *
  * @since ${PROJECT_VERSION}
  */
+@SuppressWarnings("unused")
 public class MultiLineStringReader {
 
     private final List<String> linhas;
@@ -37,7 +38,7 @@ public class MultiLineStringReader {
         return new MultiLineStringReader(Arrays.asList(str.split(System.lineSeparator())));
     }
 
-    public static MultiLineStringReader of(List<String> lists) throws IOException {
+    static MultiLineStringReader of(List<String> lists) throws IOException {
         return new MultiLineStringReader(lists);
     }
 
@@ -46,7 +47,7 @@ public class MultiLineStringReader {
         return !isLineDone();
     }
 
-    public boolean hasMoreLines() {
+    boolean hasMoreLines() {
         return curLinha < ultimaLinha;
     }
 
@@ -63,7 +64,7 @@ public class MultiLineStringReader {
     }
 
     //Count operations
-    public int remainingChars() {
+    int remainingChars() {
         Point p = mark();
         int count = 0;
         while (this.hasMoreChars()) {
@@ -135,7 +136,8 @@ public class MultiLineStringReader {
     }
 
     //Helper operations
-    public String skipWhitespace() {
+    @SuppressWarnings("UnusedReturnValue")
+    String skipWhitespace() {
         if (!Character.isWhitespace(peek())) return "";
         StringBuilder sb = new StringBuilder();
         while (hasMoreChars() && Character.isWhitespace(peek())) {
@@ -144,7 +146,7 @@ public class MultiLineStringReader {
         return sb.toString();
     }
 
-    public void nextLine() {
+    void nextLine() {
         if (!hasMoreLines()) {
             throw new IllegalStateException("Reader doesn't have more lines");
         }

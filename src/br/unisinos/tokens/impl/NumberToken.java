@@ -6,6 +6,7 @@ import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -16,11 +17,11 @@ import java.util.regex.Pattern;
  */
 public class NumberToken extends Token {
 
-    protected NumberToken(Double value) {
+    NumberToken(Double value) {
         super(TokenType.NUMERIC_VALUE, value);
     }
 
-    protected NumberToken(Integer value) {
+    NumberToken(Integer value) {
         super(TokenType.NUMERIC_VALUE, value);
     }
 
@@ -30,7 +31,7 @@ public class NumberToken extends Token {
         private static final Predicate<String> DOUBLE_PATTERN = Pattern.compile("^\\d+(.\\d+)?$").asPredicate();
 
         @Override
-        public NumberToken parse(MultiLineStringReader input) {
+        public Optional<NumberToken> tryParse(MultiLineStringReader input) {
             Point inicio = input.mark();
 
             StringBuilder sb = new StringBuilder();
@@ -43,12 +44,12 @@ public class NumberToken extends Token {
             }
             String text = sb.toString();
             if (INT_PATTERN.test(text)) {
-                return new NumberToken(Integer.valueOf(text));
+                return Optional.of(new NumberToken(Integer.valueOf(text)));
             } else if (DOUBLE_PATTERN.test(text)) {
-                return new NumberToken(Double.valueOf(text));
+                return Optional.of(new NumberToken(Double.valueOf(text)));
             }
             input.moveTo(inicio);
-            return null;
+            return Optional.empty();
         }
     }
 }

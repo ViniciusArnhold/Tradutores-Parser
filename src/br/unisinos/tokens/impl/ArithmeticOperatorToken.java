@@ -5,6 +5,8 @@ import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.util.ParserUtils;
 
+import java.util.Optional;
+
 import static br.unisinos.tokens.TokenType.ARITHMETIC_OP;
 
 /**
@@ -20,9 +22,9 @@ public class ArithmeticOperatorToken extends Token {
     public static class Parser implements TokenParser<ArithmeticOperatorToken> {
 
         @Override
-        public ArithmeticOperatorToken parse(MultiLineStringReader input) {
+        public Optional<ArithmeticOperatorToken> tryParse(MultiLineStringReader input) {
             Object parsed = ParserUtils.tryParse(input, ARITHMETIC_OP.possibleValues(), 1);
-            return parsed != null ? new ArithmeticOperatorToken(parsed) : null;
+            return parsed != null ? Optional.of(new ArithmeticOperatorToken(parsed)) : Optional.empty();
         }
     }
 }

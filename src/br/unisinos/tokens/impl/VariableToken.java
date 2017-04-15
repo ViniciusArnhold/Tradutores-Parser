@@ -7,6 +7,7 @@ import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * Created by Vinicius.
@@ -28,10 +29,10 @@ public class VariableToken extends Token {
     public static class Parser implements TokenParser<VariableToken> {
 
         @Override
-        public VariableToken parse(MultiLineStringReader input) {
+        public Optional<VariableToken> tryParse(MultiLineStringReader input) {
             MultiLineStringReader.Point point = input.mark();
-            ReservedWordToken reservedWordToken = new ReservedWordToken.Parser().parse(input);
-            if (reservedWordToken != null) {
+            Optional<ReservedWordToken> reservedWordToken = new ReservedWordToken.Parser().tryParse(input);
+            if (reservedWordToken.isPresent()) {
                 throw new ParseException("Expected a variable but found a reserved word", input.currentLine(), input.curPos() - 1);
             }
             StringBuilder sb = new StringBuilder();
@@ -41,9 +42,9 @@ public class VariableToken extends Token {
             String text = sb.toString();
             if (text.length() == 0) {
                 input.moveTo(point);
-                return null;
+                return Optional.empty();
             }
-            return new VariableToken(text);
+            return Optional.of(new VariableToken(text));
         }
     }
 }

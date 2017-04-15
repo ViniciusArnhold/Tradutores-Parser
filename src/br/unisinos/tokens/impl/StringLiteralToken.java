@@ -5,6 +5,8 @@ import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 
+import java.util.Optional;
+
 /**
  * Created by first on 10/04/2017.
  */
@@ -16,8 +18,8 @@ public class StringLiteralToken extends Token {
     public static class Parser implements TokenParser<StringLiteralToken> {
 
         @Override
-        public StringLiteralToken parse(MultiLineStringReader input) {
-            return null;
+        public Optional<StringLiteralToken> tryParse(MultiLineStringReader input) {
+            return Optional.empty();
         }
     }
 }

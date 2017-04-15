@@ -9,8 +9,8 @@ public abstract class Token {
 
     private static final String TO_STRING_FMT = "[%s,%s]";
 
-    protected TokenType type;
-    protected Object value;
+    protected final TokenType type;
+    protected final Object value;
 
     protected Token(TokenType type, Object value) {
         this.type = type;

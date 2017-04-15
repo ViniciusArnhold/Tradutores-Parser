@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: br.unisinos.Tests
+Main-Class: br.unisinos.Main
 

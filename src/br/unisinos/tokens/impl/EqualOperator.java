@@ -6,13 +6,15 @@ import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 import br.unisinos.util.ParserUtils;
 
+import java.util.Optional;
+
 /**
  * Created by Vinicius.
  *
  * @since ${PROJECT_VERSION}
  */
 public class EqualOperator extends Token {
-    protected EqualOperator(Object value) {
+    EqualOperator(Object value) {
         super(TokenType.EQUAL_OP, value);
     }
 
@@ -20,9 +22,9 @@ public class EqualOperator extends Token {
     public static class Parser implements TokenParser<EqualOperator> {
 
         @Override
-        public EqualOperator parse(MultiLineStringReader input) {
+        public Optional<EqualOperator> tryParse(MultiLineStringReader input) {
             Object parsed = ParserUtils.tryParse(input, TokenType.EQUAL_OP.possibleValues(), 1);
-            return parsed != null ? new EqualOperator(parsed) : null;
+            return parsed != null ? Optional.of(new EqualOperator(parsed)) : Optional.empty();
         }
     }
 }

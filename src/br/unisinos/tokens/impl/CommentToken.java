@@ -6,6 +6,8 @@ import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 
+import java.util.Optional;
+
 /**
  * Created by Vinicius.
  *
@@ -19,15 +21,15 @@ public class CommentToken extends Token {
 
     public static class Parser implements TokenParser<CommentToken> {
         @Override
-        public CommentToken parse(MultiLineStringReader input) {
+        public Optional<CommentToken> tryParse(MultiLineStringReader input) {
             MultiLineStringReader.Point inicio = input.mark();
             if (!input.hasMoreChars(2)) {
-                return null;
+                return Optional.empty();
             }
             String inicioToken = input.nextString(2);
 
             if ("//".equalsIgnoreCase(inicioToken)) {
-                return new CommentToken("//" + input.readToEndOfLine());
+                return Optional.of(new CommentToken("/" + input.readToEndOfLine()));
             } else if ("/*".equalsIgnoreCase(inicioToken)) {
                 StringBuilder sb = new StringBuilder("/* ");
                 do {
@@ -37,10 +39,10 @@ public class CommentToken extends Token {
                     sb.append(input.nextChar());
 
                 } while (!(sb.substring(sb.length() - 2, sb.length())).equalsIgnoreCase("*/"));
-                return new CommentToken(sb.toString());
+                return Optional.of(new CommentToken(sb.toString()));
             }
             input.moveTo(inicio);
-            return null;
+            return Optional.empty();
         }
     }
 }

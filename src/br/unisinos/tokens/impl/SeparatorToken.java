@@ -6,139 +6,141 @@ import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
 import br.unisinos.util.ParserUtils;
 
+import java.util.Optional;
+
 /**
  * Created by first on 10/04/2017.
  */
 public abstract class SeparatorToken extends Token {
 
-    protected SeparatorToken(TokenType type, String value) {
+    SeparatorToken(TokenType type, String value) {
         super(type, value);
     }
 
     public static class LeftParenthesisToken extends SeparatorToken {
 
-        protected LeftParenthesisToken(String value) {
+        LeftParenthesisToken(String value) {
             super(TokenType.L_PAREN, value);
         }
 
         public static class Parser implements TokenParser<LeftParenthesisToken> {
 
             @Override
-            public LeftParenthesisToken parse(MultiLineStringReader input) {
+            public Optional<LeftParenthesisToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_PAREN.possibleValues(), 1);
-                return parsed != null ? new LeftParenthesisToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new LeftParenthesisToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class RightParenthesisToken extends SeparatorToken {
 
-        protected RightParenthesisToken(String value) {
+        RightParenthesisToken(String value) {
             super(TokenType.R_PAREN, value);
         }
 
         public static class Parser implements TokenParser<RightParenthesisToken> {
 
             @Override
-            public RightParenthesisToken parse(MultiLineStringReader input) {
+            public Optional<RightParenthesisToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.R_PAREN.possibleValues(), 1);
-                return parsed != null ? new RightParenthesisToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new RightParenthesisToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class LeftBracketToken extends SeparatorToken {
 
-        protected LeftBracketToken(String value) {
+        LeftBracketToken(String value) {
             super(TokenType.L_BRACKET, value);
         }
 
         public static class Parser implements TokenParser<LeftBracketToken> {
 
             @Override
-            public LeftBracketToken parse(MultiLineStringReader input) {
+            public Optional<LeftBracketToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_BRACKET.possibleValues(), 1);
-                return parsed != null ? new LeftBracketToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new LeftBracketToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class RightBracketToken extends SeparatorToken {
 
-        protected RightBracketToken(String value) {
+        RightBracketToken(String value) {
             super(TokenType.R_BRACKET, value);
         }
 
         public static class Parser implements TokenParser<RightBracketToken> {
 
             @Override
-            public RightBracketToken parse(MultiLineStringReader input) {
+            public Optional<RightBracketToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_PAREN.possibleValues(), 1);
-                return parsed != null ? new RightBracketToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new RightBracketToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class LeftBraceToken extends SeparatorToken {
 
-        protected LeftBraceToken(String value) {
+        LeftBraceToken(String value) {
             super(TokenType.L_BRACE, value);
         }
 
         public static class Parser implements TokenParser<LeftBraceToken> {
 
             @Override
-            public LeftBraceToken parse(MultiLineStringReader input) {
+            public Optional<LeftBraceToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_BRACE.possibleValues(), 1);
-                return parsed != null ? new LeftBraceToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new LeftBraceToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class RightBraceToken extends SeparatorToken {
 
-        protected RightBraceToken(String value) {
+        RightBraceToken(String value) {
             super(TokenType.R_BRACE, value);
         }
 
         public static class Parser implements TokenParser<RightBraceToken> {
 
             @Override
-            public RightBraceToken parse(MultiLineStringReader input) {
+            public Optional<RightBraceToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.R_BRACE.possibleValues(), 1);
-                return parsed != null ? new RightBraceToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new RightBraceToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class CommaToken extends SeparatorToken {
 
-        protected CommaToken(String value) {
+        CommaToken(String value) {
             super(TokenType.COMMA, value);
         }
 
         public static class Parser implements TokenParser<CommaToken> {
 
             @Override
-            public CommaToken parse(MultiLineStringReader input) {
+            public Optional<CommaToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.COMMA.possibleValues(), 1);
-                return parsed != null ? new CommaToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new CommaToken(parsed.toString())) : Optional.empty();
             }
         }
     }
 
     public static class SemicolonToken extends SeparatorToken {
 
-        protected SemicolonToken(String value) {
+        SemicolonToken(String value) {
             super(TokenType.SEMICOLON, value);
         }
 
         public static class Parser implements TokenParser<SemicolonToken> {
 
             @Override
-            public SemicolonToken parse(MultiLineStringReader input) {
+            public Optional<SemicolonToken> tryParse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.SEMICOLON.possibleValues(), 1);
-                return parsed != null ? new SemicolonToken(parsed.toString()) : null;
+                return parsed != null ? Optional.of(new SemicolonToken(parsed.toString())) : Optional.empty();
             }
         }
     }
