@@ -48,6 +48,12 @@ public class Logger {
 
         private void log(String logName, String message) {
             System.out.println(String.format(LOG_FORMAT, logName, getFormatedTime(), message));
+            System.out.flush();
+        }
+
+        private void logErr(String logName, String message) {
+            System.err.println(String.format(LOG_FORMAT, logName, getFormatedTime(), message));
+            System.err.flush();
         }
 
         void info(String message) {
@@ -59,7 +65,7 @@ public class Logger {
         }
 
         void error(String message) {
-            log("ERROR", message);
+            logErr("ERROR", message);
         }
 
         public void info(String message, String... args) {

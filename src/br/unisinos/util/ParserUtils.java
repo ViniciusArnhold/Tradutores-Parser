@@ -20,11 +20,8 @@ public class ParserUtils {
         MultiLineStringReader.Point inicio = input.mark();
 
         StringBuilder sb = new StringBuilder();
-        while (input.hasMoreCharsOnSameLine() && biggestSize-- != 0) {
+        while (input.hasMoreCharsOnSameLine() && biggestSize-- != 0 && !Character.isWhitespace(input.peek())) {
             char next = input.nextChar();
-            if (Character.isWhitespace(next)) {
-                break;
-            }
             sb.append(next);
         }
 

@@ -5,7 +5,6 @@ import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
-import br.unisinos.util.ParserUtils;
 
 import java.util.HashMap;
 
@@ -30,12 +29,16 @@ public class VariableToken extends Token {
 
         @Override
         public VariableToken parse(MultiLineStringReader input) {
+            MultiLineStringReader.Point point = input.mark();
             ReservedWordToken reservedWordToken = new ReservedWordToken.Parser().parse(input);
             if (reservedWordToken != null) {
                 throw new ParseException("Expected a variable but found a reserved word", input.curPos() - 1);
             }
-            MultiLineStringReader.Point point = input.mark();
-            String text = ParserUtils.parseUntilWhitespace(input, true);
+            StringBuilder sb = new StringBuilder();
+            while(input.hasMoreCharsOnSameLine() && !Character.isWhitespace(input.peek()) && Character.isLetter(input.peek())) {
+                sb.append(input.nextChar());
+            }
+            String text = sb.toString();
             if (text.length() == 0) {
                 input.moveTo(point);
                 return null;
@@ -43,5 +46,4 @@ public class VariableToken extends Token {
             return new VariableToken(text);
         }
     }
-
 }

@@ -9,11 +9,15 @@ import br.unisinos.util.ParserUtils;
 /**
  * Created by first on 10/04/2017.
  */
-public class Separators {
+public abstract class SeparatorToken extends Token {
 
-    public static class LeftParenthesisToken extends Token {
+    protected SeparatorToken(TokenType type, String value) {
+        super(type, value);
+    }
 
-        protected LeftParenthesisToken(Object value) {
+    public static class LeftParenthesisToken extends SeparatorToken {
+
+        protected LeftParenthesisToken(String value) {
             super(TokenType.L_PAREN, value);
         }
 
@@ -22,14 +26,14 @@ public class Separators {
             @Override
             public LeftParenthesisToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_PAREN.possibleValues(), 1);
-                return parsed != null ? new LeftParenthesisToken(parsed) : null;
+                return parsed != null ? new LeftParenthesisToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class RightParenthesisToken extends Token {
+    public static class RightParenthesisToken extends SeparatorToken {
 
-        protected RightParenthesisToken(Object value) {
+        protected RightParenthesisToken(String value) {
             super(TokenType.R_PAREN, value);
         }
 
@@ -38,14 +42,14 @@ public class Separators {
             @Override
             public RightParenthesisToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.R_PAREN.possibleValues(), 1);
-                return parsed != null ? new RightParenthesisToken(parsed) : null;
+                return parsed != null ? new RightParenthesisToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class LeftBracketToken extends Token {
+    public static class LeftBracketToken extends SeparatorToken {
 
-        protected LeftBracketToken(Object value) {
+        protected LeftBracketToken(String value) {
             super(TokenType.L_BRACKET, value);
         }
 
@@ -54,14 +58,14 @@ public class Separators {
             @Override
             public LeftBracketToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_BRACKET.possibleValues(), 1);
-                return parsed != null ? new LeftBracketToken(parsed) : null;
+                return parsed != null ? new LeftBracketToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class RightBracketToken extends Token {
+    public static class RightBracketToken extends SeparatorToken {
 
-        protected RightBracketToken(Object value) {
+        protected RightBracketToken(String value) {
             super(TokenType.R_BRACKET, value);
         }
 
@@ -70,14 +74,14 @@ public class Separators {
             @Override
             public RightBracketToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_PAREN.possibleValues(), 1);
-                return parsed != null ? new RightBracketToken(parsed) : null;
+                return parsed != null ? new RightBracketToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class LeftBraceToken extends Token {
+    public static class LeftBraceToken extends SeparatorToken {
 
-        protected LeftBraceToken(Object value) {
+        protected LeftBraceToken(String value) {
             super(TokenType.L_BRACE, value);
         }
 
@@ -86,14 +90,14 @@ public class Separators {
             @Override
             public LeftBraceToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.L_BRACE.possibleValues(), 1);
-                return parsed != null ? new LeftBraceToken(parsed) : null;
+                return parsed != null ? new LeftBraceToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class RightBraceToken extends Token {
+    public static class RightBraceToken extends SeparatorToken {
 
-        protected RightBraceToken(Object value) {
+        protected RightBraceToken(String value) {
             super(TokenType.R_BRACE, value);
         }
 
@@ -102,14 +106,14 @@ public class Separators {
             @Override
             public RightBraceToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.R_BRACE.possibleValues(), 1);
-                return parsed != null ? new RightBraceToken(parsed) : null;
+                return parsed != null ? new RightBraceToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class CommaToken extends Token {
+    public static class CommaToken extends SeparatorToken {
 
-        protected CommaToken(Object value) {
+        protected CommaToken(String value) {
             super(TokenType.COMMA, value);
         }
 
@@ -118,14 +122,14 @@ public class Separators {
             @Override
             public CommaToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.COMMA.possibleValues(), 1);
-                return parsed != null ? new CommaToken(parsed) : null;
+                return parsed != null ? new CommaToken(parsed.toString()) : null;
             }
         }
     }
 
-    public static class SemicolonToken extends Token {
+    public static class SemicolonToken extends SeparatorToken {
 
-        protected SemicolonToken(Object value) {
+        protected SemicolonToken(String value) {
             super(TokenType.SEMICOLON, value);
         }
 
@@ -134,7 +138,7 @@ public class Separators {
             @Override
             public SemicolonToken parse(MultiLineStringReader input) {
                 Object parsed = ParserUtils.tryParse(input, TokenType.SEMICOLON.possibleValues(), 1);
-                return parsed != null ? new SemicolonToken(parsed) : null;
+                return parsed != null ? new SemicolonToken(parsed.toString()) : null;
             }
         }
     }

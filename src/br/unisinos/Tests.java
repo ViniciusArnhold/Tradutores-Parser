@@ -3,6 +3,7 @@ package br.unisinos;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.impl.*;
+import br.unisinos.tokens.impl.SeparatorToken.*;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
@@ -13,8 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.joining;
+import java.util.stream.Collectors;
 
 /**
  * Created by Vinicius.
@@ -31,12 +31,30 @@ public class Tests {
     private static final RelationalOperatorToken.Parser relationalParser = new RelationalOperatorToken.Parser();
     private static final ReservedWordToken.Parser reservedWordParser = new ReservedWordToken.Parser();
     private static final VariableToken.Parser variableParser = new VariableToken.Parser();
+    private static final TokenParser<? extends Token> lParenParser = new LeftParenthesisToken.Parser();
+    private static final TokenParser<? extends Token> rParenParser = new RightParenthesisToken.Parser();
+    private static final TokenParser<? extends Token> lBracketParser = new LeftBracketToken.Parser();
+    private static final TokenParser<? extends Token> rBracketParser = new RightBracketToken.Parser();
+    private static final TokenParser<? extends Token> lBraceParser = new LeftBraceToken.Parser();
+    private static final TokenParser<? extends Token> rBraceParser = new RightBraceToken.Parser();
+    private static final TokenParser<? extends Token> commaParser = new CommaToken.Parser();
+    private static final TokenParser<? extends Token> semicolonParser = new SemicolonToken.Parser();
+
 
     private static final List<TokenParser<? extends Token>> parsers;
+    private static volatile int counter = 1;
 
     static {
         parsers = new ArrayList<>();
         parsers.add(commentParser);
+        parsers.add(lParenParser);
+        parsers.add(rParenParser);
+        parsers.add(rBracketParser);
+        parsers.add(lBracketParser);
+        parsers.add(lBraceParser);
+        parsers.add(rBraceParser);
+        parsers.add(commaParser);
+        parsers.add(semicolonParser);
         parsers.add(relationalParser);
         parsers.add(arithParser);
         parsers.add(equalParser);
@@ -52,25 +70,24 @@ public class Tests {
 
         for (List<String> list : lists) {
 
-            Logger.info("Parsing " + list);
 
             MultiLineStringReader input = MultiLineStringReader.of(list);
+
             List<Token> tokens = new ArrayList<>();
+
+            Logger.info("Parsing " + list);
 
 
             while (input.hasMoreChars()) {
-                input.skipWhitespace();
-                if (input.peekString().equalsIgnoreCase(";")) {
-                    input.nextChar();
-                    input.skipWhitespace();
+                printState(tokens, input);
+                if(!input.hasMoreCharsOnSameLine() && input.hasMoreLines()) {
+                    input.nextLine();
                 }
-                MultiLineStringReader.Point dumb = input.mark();
-                String x = input.peekString();
+                input.skipWhitespace();
                 tryParseAny(input, tokens);
             }
 
-            System.out.println(tokens.stream().map(Token::toString).collect(joining(" ")));
-
+            counter=0;
         }
 
     }
@@ -85,6 +102,15 @@ public class Tests {
             }
         }
         return null;
+    }
+
+    private static void printState(List<Token> listTokens, MultiLineStringReader input) {
+        System.out.println();
+        Logger.info("Run: " + counter++);
+        Logger.info("Current Tokens: " + listTokens.stream().map(Token::toString).collect(Collectors.joining(" ")));
+        MultiLineStringReader.Point p = input.mark();
+        Logger.info("Next 10 chars: " + (input.hasMoreChars(10) ? input.nextString(10) : input.nextString(input.remainingChars())));
+        input.moveTo(p);
     }
 }
 

@@ -15,20 +15,17 @@ import java.util.Objects;
  */
 public class MultiLineStringReader {
 
-    private final int primeiraLinha = 0;
-    private final int ultimaLinha;
-
-    private final int primeiraColuna = 0;
     private final List<String> linhas;
+    private final int ultimaLinha;
+    private int curColuna;
     private int ultimaColuna;
     private int curLinha;
-    private int curColuna = -1;
 
     private MultiLineStringReader(List<String> linhas) {
         this.linhas = Collections.unmodifiableList(linhas);
         this.ultimaLinha = linhas.size() - 1;
-        this.curLinha = 0;
-        this.curColuna = 0;
+        this.curLinha = -1;
+        this.curColuna = -1;
         this.ultimaColuna = linhas.isEmpty() ? 0 : (linhas.get(0).length() - 1);
     }
 
@@ -44,24 +41,17 @@ public class MultiLineStringReader {
         return new MultiLineStringReader(lists);
     }
 
+    //Boolean operations
     public boolean hasMoreCharsOnSameLine() {
         return !isLineDone();
     }
 
     public boolean hasMoreLines() {
-        return curLinha != ultimaLinha;
+        return curLinha < ultimaLinha;
     }
 
     public boolean hasMoreChars() {
         return this.curColuna < ultimaColuna || hasMoreLines();
-    }
-
-    public int remainingChars() {
-        int sum = ultimaColuna - curColuna;
-        for (int i = curLinha; i < linhas.size(); i++) {
-            sum += linhas.get(i).length();
-        }
-        return sum;
     }
 
     public boolean hasMoreChars(int count) {
@@ -69,18 +59,27 @@ public class MultiLineStringReader {
     }
 
     private boolean isLineDone() {
-        return this.curColuna == ultimaColuna;
+        return this.curColuna >= ultimaColuna;
     }
 
-    public char nextChar() {
-        if (!hasMoreChars()) {
-            throw new IllegalStateException("EOS");
+    //Count operations
+    public int remainingChars() {
+        Point p = mark();
+        int count = 0;
+        while (this.hasMoreChars()) {
+            moveToNext();
+            count++;
         }
-        if (isLineDone()) {
-            this.curColuna = primeiraColuna;
-            nextLine();
-        }
-        return linhas.get(curLinha).charAt(curColuna++);
+        moveTo(p);
+        return count;
+    }
+
+    //GET operations
+    public char nextChar() throws IllegalStateException {
+        if (!hasMoreChars()) throw new IllegalStateException("EOS");
+
+        moveToNext();
+        return linhas.get(curLinha).charAt(curColuna);
     }
 
     public String currentLine() {
@@ -103,10 +102,9 @@ public class MultiLineStringReader {
         return nextString(1);
     }
 
-    public String nextString(int size) {
-        if (size < 1) {
-            throw new IllegalArgumentException("size is less than 1 " + size);
-        }
+    public String nextString(int size) throws IllegalArgumentException {
+        if (size < 1) throw new IllegalArgumentException("size is less than 1 " + size);
+
         char[] str = new char[size];
         int count = 0;
         while (count < size) {
@@ -115,16 +113,8 @@ public class MultiLineStringReader {
         return new String(str).intern();
     }
 
-    public String skipWhitespace() {
-        if (!Character.isWhitespace(peek())) return "";
-        StringBuilder sb = new StringBuilder();
-        while (hasMoreChars()) {
-            if (!Character.isWhitespace(peek())) {
-                break;
-            }
-            sb.append(nextChar());
-        }
-        return sb.toString();
+    public String readToEndOfLine() {
+        return this.linhas.get(curLinha).substring(curColuna);
     }
 
     public String peekString() {
@@ -142,53 +132,67 @@ public class MultiLineStringReader {
         return ret;
     }
 
+    //Helper operations
+    public String skipWhitespace() {
+        if (!Character.isWhitespace(peek())) return "";
+        StringBuilder sb = new StringBuilder();
+        while (hasMoreChars() && Character.isWhitespace(peek())) {
+            sb.append(nextChar());
+        }
+        return sb.toString();
+    }
+
     public void nextLine() {
         if (!hasMoreLines()) {
             throw new IllegalStateException("Reader doesn't have more lines");
         }
         curLinha++;
-        curColuna = primeiraColuna;
+        curColuna = -1;
         ultimaColuna = this.linhas.get(curLinha).length() - 1;
-    }
-
-    public String readToEndOfLine() {
-        StringBuilder sb = new StringBuilder(ultimaColuna - curColuna);
-        int thisLinha = curLinha;
-        //noinspection ConstantConditions
-        while (curLinha != thisLinha) {
-            sb.append(nextChar());
-        }
-        return sb.toString();
     }
 
     public Point mark() {
         return new Point(this.curColuna, this.curLinha);
     }
 
-    public void moveTo(Point point) {
+    public void moveTo(Point point) throws IllegalArgumentException {
         Objects.requireNonNull(point);
-        if (point.linha < 0
-                || point.coluna < 0
-                || point.linha > this.ultimaLinha
-                || point.coluna > this.linhas.get(point.linha).length() - 1)
-            throw new IllegalArgumentException(point.toString());
+        if (point.linha < -1 || point.coluna < -1 || point.linha > this.ultimaLinha || (point.coluna > (linhas.get(point.linha == -1 ? 0 : point.linha).length() - 1)))
+        throw new IllegalArgumentException("Point out of possible ranges: " + point);
 
         this.curColuna = point.coluna;
         this.curLinha = point.linha;
-        this.ultimaColuna = currentLine().length() - 1;
+        this.ultimaColuna = linhas.get(point.linha == -1 ? 0 : point.linha).length() - 1;
+    }
+
+    private void moveToNext() {
+        if (linhas.isEmpty()) {
+            throw new IllegalStateException("EOS");
+        }
+        if (this.curLinha == -1) {
+            curLinha++;
+        }
+        if (this.curColuna >= ultimaColuna) {
+            if (this.curLinha >= ultimaLinha) {
+                throw new IllegalStateException("EOS");
+            }
+            curLinha++;
+            curColuna = 0;
+            ultimaColuna = this.linhas.get(curLinha).length() - 1;
+        } else {
+            this.curColuna++;
+        }
+
     }
 
     @Override
     public String toString() {
-        String sb = "MultiLineStringReader{" + "primeiraLinha=" + primeiraLinha +
+        return "MultiLineStringReader{" + "linhas=" + linhas +
                 ", ultimaLinha=" + ultimaLinha +
-                ", primeiraColuna=" + primeiraColuna +
-                ", linhas=" + linhas +
+                ", curColuna=" + curColuna +
                 ", ultimaColuna=" + ultimaColuna +
                 ", curLinha=" + curLinha +
-                ", curColuna=" + curColuna +
                 '}';
-        return sb;
     }
 
     public class Point {
