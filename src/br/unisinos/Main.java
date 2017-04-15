@@ -29,6 +29,7 @@ class Main {
     private static final TokenParser<? extends Token> relationalParser = new RelationalOperatorToken.Parser();
     private static final TokenParser<? extends Token> reservedWordParser = new ReservedWordToken.Parser();
     private static final TokenParser<? extends Token> variableParser = new VariableToken.Parser();
+    private static final TokenParser<? extends Token> stringLiteralParser = new StringLiteralToken.Parser();
     private static final TokenParser<? extends Token> lParenParser = new LeftParenthesisToken.Parser();
     private static final TokenParser<? extends Token> rParenParser = new RightParenthesisToken.Parser();
     private static final TokenParser<? extends Token> lBracketParser = new LeftBracketToken.Parser();
@@ -57,6 +58,7 @@ class Main {
         hParsers.add(equalParser);
         hParsers.add(numberParser);
         hParsers.add(reservedWordParser);
+        hParsers.add(stringLiteralParser);
         hParsers.add(variableParser);
         PARSERS = Collections.unmodifiableList(hParsers);
     }
@@ -93,10 +95,17 @@ class Main {
             Logger.warn("Parsing file: " + path.toAbsolutePath());
             List<Token> tokens = new ArrayList<>();
             for (List<String> list : Utils.split(Files.readAllLines(path))) {
-                Logger.info("Parsing: ");
+                if (list.isEmpty()) {
+                    Logger.warn("Found empty file, skipping.");
+                }
+                Logger.warn("Parsing: ");
                 Logger.info(list.stream().collect(Collectors.joining(System.lineSeparator())));
 
                 MultiLineStringReader input = MultiLineStringReader.of(list);
+
+                if (!input.hasMoreChars()) {
+                    Logger.warn("Found empty file, skipping.");
+                }
 
                 tokens = new ArrayList<>();
                 while (input.hasMoreChars()) {
@@ -120,6 +129,8 @@ class Main {
 
         }
 
+        Logger.lineBreak();
+        Logger.info("           ----------          ");
         Logger.lineBreak();
         Logger.info("Finished Parsing All Files");
         Logger.info("Results");

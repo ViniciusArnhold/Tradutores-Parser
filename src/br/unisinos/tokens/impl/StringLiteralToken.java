@@ -13,7 +13,7 @@ import java.util.Optional;
  * @since ${PROJECT_VERSION}
  */
 public class StringLiteralToken extends Token {
-    protected StringLiteralToken(String value) {
+    StringLiteralToken(String value) {
         super(TokenType.STRING_LITERAL, value);
     }
 
@@ -21,7 +21,23 @@ public class StringLiteralToken extends Token {
 
         @Override
         public Optional<StringLiteralToken> tryParse(MultiLineStringReader input) {
-            return Optional.empty();
+            MultiLineStringReader.Point point = input.mark();
+
+            input.skipWhitespace();
+            if (input.nextChar() == '"') {
+                StringBuilder sb = new StringBuilder("\"");
+                while (input.hasMoreChars() && !Character.isWhitespace(input.peek())) {
+                    if (input.peek() == '"') {
+                        sb.append(input.nextChar());
+                        break;
+                    }
+                    sb.append(input.nextChar());
+                }
+                return Optional.of(new StringLiteralToken(sb.toString()));
+            } else {
+                input.moveTo(point);
+                return Optional.empty();
+            }
         }
     }
 }

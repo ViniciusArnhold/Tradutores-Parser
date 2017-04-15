@@ -115,7 +115,7 @@ public class MultiLineStringReader {
     }
 
     public String readToEndOfLine() {
-        String ret =  this.linhas.get(curLinha).substring(curColuna);
+        String ret = this.linhas.get(curLinha).substring(curColuna);
         nextLine();
         return ret;
     }
@@ -137,7 +137,8 @@ public class MultiLineStringReader {
 
     //Helper operations
     @SuppressWarnings("UnusedReturnValue")
-    String skipWhitespace() {
+    public String skipWhitespace() {
+        if (!hasMoreChars()) return "";
         if (!Character.isWhitespace(peek())) return "";
         StringBuilder sb = new StringBuilder();
         while (hasMoreChars() && Character.isWhitespace(peek())) {
@@ -162,7 +163,7 @@ public class MultiLineStringReader {
     public void moveTo(Point point) throws IllegalArgumentException {
         Objects.requireNonNull(point);
         if (point.linha < -1 || point.coluna < -1 || point.linha > this.ultimaLinha || (point.coluna > (linhas.get(point.linha == -1 ? 0 : point.linha).length() - 1)))
-        throw new IllegalArgumentException("Point out of possible ranges: " + point);
+            throw new IllegalArgumentException("Point out of possible ranges: " + point);
 
         this.curColuna = point.coluna;
         this.curLinha = point.linha;
