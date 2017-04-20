@@ -3,7 +3,7 @@ package br.unisinos;
 import java.util.regex.Pattern;
 
 /**
- * Created by first.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

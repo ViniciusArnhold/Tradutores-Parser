@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

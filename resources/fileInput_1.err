@@ -4,4 +4,4 @@ char a[] = "Eduardo\0";
 and here too */
 int b = 56;
 int a = (5 * 4) / 1 + 2.0;
-int b = (a > c) ?;
+int b = (a > c) ?; <- this will error

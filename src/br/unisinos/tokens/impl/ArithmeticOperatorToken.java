@@ -10,7 +10,7 @@ import java.util.Optional;
 import static br.unisinos.tokens.TokenType.ARITHMETIC_OP;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

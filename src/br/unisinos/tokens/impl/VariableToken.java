@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */
@@ -34,7 +34,9 @@ public class VariableToken extends Token {
             });
 
             StringBuilder sb = new StringBuilder();
-            while (input.hasMoreCharsOnSameLine() && !Character.isWhitespace(input.peek()) && Character.isLetter(input.peek())) {
+            while (input.hasMoreCharsOnSameLine()
+                    && !Character.isWhitespace(input.peek())
+                    && Character.isLetterOrDigit(input.peek())) {
                 sb.append(input.nextChar());
             }
             String text = sb.toString();

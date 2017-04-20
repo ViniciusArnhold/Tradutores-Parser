@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

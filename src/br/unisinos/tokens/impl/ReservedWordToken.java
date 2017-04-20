@@ -8,7 +8,7 @@ import br.unisinos.tokens.TokenType;
 import java.util.Optional;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

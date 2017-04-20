@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo, Fabio e Eduardo, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */

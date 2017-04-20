@@ -1,0 +1,5 @@
+int var = 12;
+float outraVar = var*2;
+if(outraVar >= 23) {
+    printf(outraVar);
+}

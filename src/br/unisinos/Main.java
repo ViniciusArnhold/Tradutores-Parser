@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */
@@ -42,6 +42,7 @@ class Main {
 
     private static final List<TokenParser<? extends Token>> PARSERS;
     private static final String USAGE = "USAGE: <--full> [files]+";
+    private static volatile int parseFailCount = 0;
 
     static {
         List<TokenParser<? extends Token>> hParsers = new ArrayList<>();
@@ -70,6 +71,8 @@ class Main {
             Logger.error(USAGE);
             System.exit(0);
         }
+
+
         Logger.info("Program called with " + "'" + Arrays.toString(args) + "'");
         boolean isFull = (args.length > 0) && args[0].equalsIgnoreCase("--full");
 
@@ -140,17 +143,16 @@ class Main {
         Logger.lineBreak();
         Logger.info("Finished Parsing All Files");
         Logger.info("Results");
-        Logger.info(String.valueOf(mapping.entrySet().stream()
-                .map(e -> e.getKey() + System.lineSeparator() + e.getValue())
-                .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()))));
+        Logger.info(String.valueOf(
+                mapping.entrySet().stream()
+                        .map(e -> e.getKey() + System.lineSeparator() + e.getValue())
+                        .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()))));
 
         Logger.lineBreak();
         Logger.lineBreak();
         Logger.lineBreak();
         Logger.warn("Program ran sucefully.");
     }
-
-    private static volatile int parseFailCount = 0;
 
     private static void tryParseAny(MultiLineStringReader input, List<Token> listTokens) {
         for (TokenParser<? extends Token> parser : PARSERS) {
@@ -161,10 +163,12 @@ class Main {
                 return;
             }
         }
+
+
         parseFailCount++;
         // By EPJ: Throw an expection because no token was matched.
         if (parseFailCount > 3) {
-            throw new ParseException("Unknown token.", input.currentLine(), input.curPos());
+            throw new ParseException("Unknown token.", input.currentLine(), input.hasMoreChars() ? (input.curPos() + 1) : input.curPos());
         }
     }
 }

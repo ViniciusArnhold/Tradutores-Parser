@@ -3,7 +3,7 @@ package br.unisinos.parse;
 import java.util.Arrays;
 
 /**
- * Created by Vinicius.
+ * Created by Vinicius, Fabio e Eduardo.
  *
  * @since ${PROJECT_VERSION}
  */
