@@ -7,7 +7,6 @@ import br.unisinos.tokens.impl.*;
 import br.unisinos.tokens.impl.SeparatorToken.*;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
-import jdk.nashorn.internal.runtime.ParserException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,6 +68,7 @@ class Main {
         // Arguments processing
         if (args.length == 0) {
             Logger.error(USAGE);
+            System.exit(0);
         }
         Logger.info("Program called with " + "'" + Arrays.toString(args) + "'");
         boolean isFull = (args.length > 0) && args[0].equalsIgnoreCase("--full");
@@ -76,6 +76,7 @@ class Main {
         String[] files = Arrays.copyOfRange(args, isFull ? 1 : 0, args.length);
         if (files.length == 0) {
             Logger.error("No file specifed" + System.lineSeparator() + USAGE);
+            System.exit(1);
         }
 
         // Check file's consistency
@@ -128,8 +129,7 @@ class Main {
             Logger.info("Finished Parsing");
             if (tokens.isEmpty())
                 Logger.info("No token for empty files.");
-            else
-            {
+            else {
                 Logger.info(tokens.toString());
                 Logger.info(System.lineSeparator());
             }
@@ -150,16 +150,22 @@ class Main {
         Logger.warn("Program ran sucefully.");
     }
 
+    private static volatile int parseFailCount = 0;
+
     private static void tryParseAny(MultiLineStringReader input, List<Token> listTokens) {
         for (TokenParser<? extends Token> parser : PARSERS) {
             Optional<? extends Token> token = parser.tryParse(input);
             if (token.isPresent()) {
+                parseFailCount = 0;
                 listTokens.add(token.get());
                 return;
             }
         }
+        parseFailCount++;
         // By EPJ: Throw an expection because no token was matched.
-        throw new ParseException("Unknown token.", input.currentLine(), input.peek());
+        if (parseFailCount > 3) {
+            throw new ParseException("Unknown token.", input.currentLine(), input.curPos());
+        }
     }
 }
 
