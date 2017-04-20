@@ -25,6 +25,7 @@ public class ReservedWordToken extends Token {
         public Optional<ReservedWordToken> tryParse(MultiLineStringReader input) {
             MultiLineStringReader.Point point = input.mark();
             StringBuilder sb = new StringBuilder();
+
             while (input.hasMoreCharsOnSameLine() && Character.isLetter(input.peek())) {
                 sb.append(input.nextChar());
             }

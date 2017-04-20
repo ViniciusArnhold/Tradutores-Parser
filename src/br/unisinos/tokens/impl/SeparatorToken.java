@@ -77,7 +77,7 @@ public abstract class SeparatorToken extends Token {
 
             @Override
             public Optional<RightBracketToken> tryParse(MultiLineStringReader input) {
-                Object parsed = ParserUtils.tryParse(input, TokenType.L_PAREN.possibleValues(), 1);
+                Object parsed = ParserUtils.tryParse(input, TokenType.R_BRACKET.possibleValues(), 1);
                 return parsed != null ? Optional.of(new RightBracketToken(parsed.toString())) : Optional.empty();
             }
         }

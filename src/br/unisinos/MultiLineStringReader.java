@@ -3,10 +3,7 @@ package br.unisinos;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by Vinicius.
@@ -23,10 +20,18 @@ public class MultiLineStringReader {
     private int curLinha;
 
     private MultiLineStringReader(List<String> linhas) {
-        this.linhas = Collections.unmodifiableList(linhas);
-        this.ultimaLinha = linhas.size() - 1;
         this.curLinha = -1;
         this.curColuna = -1;
+        // by EPJ: Remove all lines with no content.
+        Iterator<String> it = linhas.iterator();
+        while (it.hasNext())
+        {
+            if (it.next().length() == 0)
+                it.remove();
+        }
+
+        this.linhas = Collections.unmodifiableList(linhas);
+        this.ultimaLinha = linhas.size() - 1;
         this.ultimaColuna = linhas.isEmpty() ? 0 : (linhas.get(0).length() - 1);
     }
 
@@ -53,7 +58,7 @@ public class MultiLineStringReader {
 
     public boolean hasMoreChars() {
         // by EPJ: This modification prevents invalid states when a file is empty.
-        return (this.curColuna < ultimaColuna || hasMoreLines()) && (this.linhas.size() > 0);
+        return (ultimaColuna > this.curColuna|| hasMoreLines()) && (this.linhas.size() > 0);
     }
 
     public boolean hasMoreChars(@SuppressWarnings("SameParameterValue") int count) {
@@ -78,9 +83,10 @@ public class MultiLineStringReader {
 
     //GET operations
     public char nextChar() throws IllegalStateException {
-        if (!hasMoreChars()) throw new IllegalStateException("EOS");
+        if (!hasMoreChars()) throw new IllegalStateException("EOS -> linha = " + curLinha + " coluna = " + curColuna);
 
         moveToNext();
+
         return linhas.get(curLinha).charAt(curColuna);
     }
 

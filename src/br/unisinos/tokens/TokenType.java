@@ -16,7 +16,7 @@ public enum TokenType {
 
     NUMERIC_VALUE("num", Double.toString(Double.NEGATIVE_INFINITY), Double.toString(Double.POSITIVE_INFINITY)),
 
-    RESERVED_WORD("reserved_word", "do", "while", "if", "else", "for", "printf", "return", "null", "int", "float", "double", "string", "bool"),
+    RESERVED_WORD("reserved_word", "do", "while", "if", "else", "for", "printf", "return", "null", "int", "float", "double", "string", "bool", "char"),
 
     RELATIONAL_OP("Relational_Op", "<", "<=", "==", "!=", ">=", ">"),
 

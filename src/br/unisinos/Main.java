@@ -1,11 +1,13 @@
 package br.unisinos;
 
+import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.impl.*;
 import br.unisinos.tokens.impl.SeparatorToken.*;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
+import jdk.nashorn.internal.runtime.ParserException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -156,6 +158,8 @@ class Main {
                 return;
             }
         }
+        // By EPJ: Throw an expection because no token was matched.
+        throw new ParseException("Unknown token.", input.currentLine(), input.peek());
     }
 }
 
