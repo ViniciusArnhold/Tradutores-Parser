@@ -54,7 +54,8 @@ public class Logger {
         }
 
         private void doLog(PrintStream out, String message, String logName) {
-            out.println(Arrays.stream(message.split(System.lineSeparator())).collect(
+            out.println(Arrays.stream(message.split(System.lineSeparator()))
+                    .collect(
                     Collectors.joining(System.lineSeparator() + "[" + logName + "]" + " - " + getFormatedTime() + " : ",
                             "[" + logName + "]" + " - " + getFormatedTime() + " : ", "")));
             System.out.flush();
