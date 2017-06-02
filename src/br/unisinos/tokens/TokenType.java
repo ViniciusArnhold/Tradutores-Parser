@@ -41,6 +41,7 @@ public enum TokenType {
 
     COMMENT("comment", "//", "/**/"),
 
+    // Grau B
     FORWARD("frente","FRENTE 5"),
     LEFT("esquerda","ESQUERDA 5"),
     RIGHT("direita","DIREITA 5"),
@@ -49,8 +50,6 @@ public enum TokenType {
     THEN_OP("entao","FORWARD ENTAO BACK"),
 
     AFTER_OP("apos","FORWARD APOS BACK");
-
-
 
     private final String tokenName;
     private final Set<String> possibleValues;
