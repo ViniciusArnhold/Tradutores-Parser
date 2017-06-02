@@ -8,8 +8,5 @@ import java.util.regex.Pattern;
  * @since ${PROJECT_VERSION}
  */
 final class Tokenizer {
-
     private static final Pattern WHITESPACE_SPLIT = Pattern.compile("([^\"]\\S*|\".+?\")\\s*");
-
-
 }

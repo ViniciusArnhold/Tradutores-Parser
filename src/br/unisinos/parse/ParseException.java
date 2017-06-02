@@ -21,7 +21,7 @@ public class ParseException extends RuntimeException {
         char[] str = new char[num];
         Arrays.fill(str, '-');
         str[num - 1] = '^';
-        return new String(str);
+        return new String(str).intern();
     }
 
 

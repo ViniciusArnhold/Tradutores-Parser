@@ -1,5 +1,11 @@
 package br.unisinos;
 
+import br.unisinos.tokens.TokenType;
+import br.unisinos.tokens.impl.DirectionToken;
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
+import java.util.Optional;
+
 /**
  * Created by vinicius on 25/05/17.
  */
@@ -13,11 +19,9 @@ public interface Direction {
         return new Simple(Cardinal.EAST, amount);
     }
 
-
     static Direction ofWest(long amount) {
         return new Simple(Cardinal.WEST, amount);
     }
-
 
     static Direction ofNorth(long amount) {
         return new Simple(Cardinal.NORTH, amount);
@@ -27,6 +31,20 @@ public interface Direction {
         return new Simple(Cardinal.SOUTH, amount);
     }
 
+    static Direction ofTokenType(TokenType type, long amount) {
+        switch (type) {
+            case FORWARD:
+                return ofNorth(amount);
+            case LEFT:
+                return ofWest(amount);
+            case RIGHT:
+                return ofEast(amount);
+            case BACK:
+                return ofSouth(amount);
+            default:
+                throw new IllegalArgumentException("type");
+        }
+    }
 
     class Simple implements Direction {
 
