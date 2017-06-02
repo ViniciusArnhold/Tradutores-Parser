@@ -52,7 +52,7 @@ public abstract class OperatorToken extends Token {
 
             @Override
             public Optional<OperatorToken> tryParse(MultiLineStringReader input) {
-                return OperatorToken.tryParse(TokenType.THEN_OP, input).map(AfterOperatorToken::new);
+                return OperatorToken.tryParse(TokenType.AFTER_OP, input).map(AfterOperatorToken::new);
             }
         }
     }
