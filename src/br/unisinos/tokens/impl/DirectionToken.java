@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static br.unisinos.MultiLineStringReader.*;
+import static br.unisinos.MultiLineStringReader.Point;
 
 /**
  * Created by vinicius on 01/06/17.
@@ -46,7 +46,7 @@ public abstract class DirectionToken extends Token {
     }
 
     public static class EsquerdaToken extends DirectionToken {
-        EsquerdaToken(Direction direction) {
+        public EsquerdaToken(Direction direction) {
             super(TokenType.LEFT, direction);
         }
 

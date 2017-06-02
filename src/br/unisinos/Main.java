@@ -1,21 +1,5 @@
 package br.unisinos;
 
-import br.unisinos.parse.ParseException;
-import br.unisinos.tokens.Token;
-import br.unisinos.tokens.TokenParser;
-import br.unisinos.tokens.impl.*;
-import br.unisinos.tokens.impl.SeparatorToken.*;
-import br.unisinos.util.Logger;
-import br.unisinos.util.Utils;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
@@ -23,7 +7,7 @@ import java.util.stream.Collectors;
  */
 class Main {
 
-    private static final TokenParser<? extends Token> arithParser = new ArithmeticOperatorToken.Parser();
+    /*private static final TokenParser<? extends Token> arithParser = new ArithmeticOperatorToken.Parser();
     private static final TokenParser<? extends Token> commentParser = new CommentToken.Parser();
     private static final TokenParser<? extends Token> equalParser = new EqualOperator.Parser();
     private static final TokenParser<? extends Token> numberParser = new NumberToken.Parser();
@@ -170,6 +154,6 @@ class Main {
         if (parseFailCount > 3) {
             throw new ParseException("Unknown token.", input.currentLine(), input.hasMoreChars() ? (input.curPos() + 1) : input.curPos());
         }
-    }
+    }*/
 }
 
