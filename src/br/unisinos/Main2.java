@@ -3,7 +3,8 @@ package br.unisinos;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
-import br.unisinos.tokens.impl.OperatorToken;
+import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
+import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
@@ -15,14 +16,22 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static br.unisinos.tokens.impl.OperatorToken.ThenOperatorToken;
+
 /**
  * Created by vinicius on 01/06/17.
  */
 public class Main2 {
     private static final TokenParser<? extends Token> thenOperatorParser =
-            new OperatorToken.ThenOperatorToken.Parser();
+            new ThenOperatorToken.Parser();
     private static final TokenParser<? extends Token> afterOperatorParser =
-            new OperatorToken.AfterOperatorToken.Parser();
+            new AfterOperatorToken.Parser();
+
+    private static final TokenParser<? extends Token> rightToken = new DireitaToken.Parser();
+    private static final TokenParser<? extends Token> leftToken = new DireitaToken.Parser();
+    private static final TokenParser<? extends Token> upToken = new DireitaToken.Parser();
+    private static final TokenParser<? extends Token> backToken = new DireitaToken.Parser();
+
 
     private static final List<TokenParser<? extends Token>> PARSERS;
     private static final String USAGE = "USAGE: <--full> [files]+";
@@ -32,6 +41,11 @@ public class Main2 {
         List<TokenParser<? extends Token>> hParsers = new ArrayList<>();
         hParsers.add(thenOperatorParser);
         hParsers.add(afterOperatorParser);
+
+        hParsers.add(rightToken);
+        hParsers.add(leftToken);
+        hParsers.add(upToken);
+        hParsers.add(backToken);
 
         PARSERS = Collections.unmodifiableList(hParsers);
     }

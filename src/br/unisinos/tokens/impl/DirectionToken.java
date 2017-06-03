@@ -50,7 +50,7 @@ public abstract class DirectionToken extends Token {
             super(TokenType.LEFT, direction);
         }
 
-        public class Parser implements TokenParser<EsquerdaToken> {
+        public static class Parser implements TokenParser<EsquerdaToken> {
             @Override
             public Optional<EsquerdaToken> tryParse(MultiLineStringReader input) {
                 return DirectionToken.tryParse(TokenType.LEFT, input)
@@ -64,7 +64,7 @@ public abstract class DirectionToken extends Token {
             super(TokenType.BACK, direction);
         }
 
-        public class Parser implements TokenParser<BackToken> {
+        public static class Parser implements TokenParser<BackToken> {
             @Override
             public Optional<BackToken> tryParse(MultiLineStringReader input) {
                 return DirectionToken.tryParse(TokenType.BACK, input)
@@ -78,7 +78,7 @@ public abstract class DirectionToken extends Token {
             super(TokenType.FORWARD, direction);
         }
 
-        public class Parser implements TokenParser<ForwardToken> {
+        public static class Parser implements TokenParser<ForwardToken> {
             @Override
             public Optional<ForwardToken> tryParse(MultiLineStringReader input) {
                 return DirectionToken.tryParse(TokenType.FORWARD, input)
@@ -92,7 +92,7 @@ public abstract class DirectionToken extends Token {
             super(TokenType.RIGHT, direction);
         }
 
-        public class Parser implements TokenParser<DireitaToken> {
+        public static class Parser implements TokenParser<DireitaToken> {
             @Override
             public Optional<DireitaToken> tryParse(MultiLineStringReader input) {
                 return DirectionToken.tryParse(TokenType.RIGHT, input)
