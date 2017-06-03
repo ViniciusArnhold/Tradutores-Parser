@@ -3,7 +3,10 @@ package br.unisinos;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
+import br.unisinos.tokens.impl.DirectionToken.BackToken;
 import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
+import br.unisinos.tokens.impl.DirectionToken.EsquerdaToken;
+import br.unisinos.tokens.impl.DirectionToken.ForwardToken;
 import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
@@ -18,9 +21,6 @@ import java.util.stream.Collectors;
 
 import static br.unisinos.tokens.impl.OperatorToken.ThenOperatorToken;
 
-/**
- * Created by vinicius on 01/06/17.
- */
 public class Main2 {
     private static final TokenParser<? extends Token> thenOperatorParser =
             new ThenOperatorToken.Parser();
@@ -28,9 +28,9 @@ public class Main2 {
             new AfterOperatorToken.Parser();
 
     private static final TokenParser<? extends Token> rightToken = new DireitaToken.Parser();
-    private static final TokenParser<? extends Token> leftToken = new DireitaToken.Parser();
-    private static final TokenParser<? extends Token> upToken = new DireitaToken.Parser();
-    private static final TokenParser<? extends Token> backToken = new DireitaToken.Parser();
+    private static final TokenParser<? extends Token> leftToken = new EsquerdaToken.Parser();
+    private static final TokenParser<? extends Token> upToken = new ForwardToken.Parser();
+    private static final TokenParser<? extends Token> backToken = new BackToken.Parser();
 
 
     private static final List<TokenParser<? extends Token>> PARSERS;
