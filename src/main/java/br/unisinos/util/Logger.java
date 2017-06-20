@@ -1,5 +1,7 @@
 package br.unisinos.util;
 
+import br.unisinos.analysis.AnalysisReport;
+
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +41,20 @@ public class Logger {
         LOGGER.warn(message, args);
     }
 
+    public static void logAnalysis(AnalysisReport report) {
+        StringBuilder sb = new StringBuilder(30);
+        switch (report.type()) {
+            case TOKEN:
+                break;
+            case INFO:
+                break;
+            case EXCEPTION:
+                break;
+            default:
+                throw new IllegalStateException(String.valueOf(report.type()));
+        }
+    }
+
     public static void error(String message, Object... args) {
         LOGGER.error(message, args);
     }
@@ -56,8 +72,8 @@ public class Logger {
         private void doLog(PrintStream out, String message, String logName) {
             out.println(Arrays.stream(message.split(System.lineSeparator()))
                     .collect(
-                    Collectors.joining(System.lineSeparator() + "[" + logName + "]" + " - " + getFormatedTime() + " : ",
-                            "[" + logName + "]" + " - " + getFormatedTime() + " : ", "")));
+                            Collectors.joining(System.lineSeparator() + "[" + logName + "]" + " - " + getFormatedTime() + " : ",
+                                    "[" + logName + "]" + " - " + getFormatedTime() + " : ", "")));
             System.out.flush();
             System.err.flush();
         }

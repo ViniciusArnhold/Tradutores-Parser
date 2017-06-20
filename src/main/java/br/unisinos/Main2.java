@@ -1,5 +1,10 @@
 package br.unisinos;
 
+import br.unisinos.analysis.DelegatingRule;
+import br.unisinos.analysis.rule.MultiOptionRule;
+import br.unisinos.analysis.rule.ParserRule;
+import br.unisinos.analysis.rule.Rule;
+import br.unisinos.analysis.rule.SequentialRule;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
@@ -8,6 +13,7 @@ import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
 import br.unisinos.tokens.impl.DirectionToken.EsquerdaToken;
 import br.unisinos.tokens.impl.DirectionToken.ForwardToken;
 import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
+import br.unisinos.tokens.impl.SeparatorToken;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
@@ -86,6 +92,74 @@ public class Main2 {
         }
 
         HashMap<String, List<Token>> mapping = new HashMap<>();
+
+        //basico -> FRENTE n
+        Rule forwardRule = new ParserRule(new ForwardToken.Parser(), Logger::logAnalysis);
+
+        //basico -> ESQUERDA n
+        Rule leftRule = new ParserRule(new EsquerdaToken.Parser(), Logger::logAnalysis);
+
+        //basico -> DIREITA n
+        Rule rightRule = new ParserRule(new DireitaToken.Parser(), Logger::logAnalysis);
+
+        //basico -> TRAS n
+        Rule backRule = new ParserRule(new BackToken.Parser(), Logger::logAnalysis);
+
+        //comando -> basico
+        Rule basicRule = new MultiOptionRule.Builder(Logger::logAnalysis)
+                .orAccept(forwardRule)
+                .orAccept(leftRule)
+                .orAccept(rightRule)
+                .orAccept(backRule)
+                .build();
+
+
+        //Delegators servem para resolver ciclos.
+        DelegatingRule thenRuleDelegator = new DelegatingRule();
+        DelegatingRule afterRuleDelegator = new DelegatingRule();
+        DelegatingRule innerRuleDelegator = new DelegatingRule();
+
+        //Aceita a primeira regra que funcionar
+        Rule multiOptionCommandRule = new MultiOptionRule.Builder(Logger::logAnalysis)
+                .orAccept(thenRuleDelegator)
+                .orAccept(afterRuleDelegator)
+                .orAccept(innerRuleDelegator)
+                .orAccept(basicRule)
+                .build();
+
+        //comando -> (comando)
+        Rule innerRule = new SequentialRule.Builder(Logger::logAnalysis)
+                .withParser(new SeparatorToken.LeftParenthesisToken.Parser())
+                .withRule(multiOptionCommandRule)
+                .withParser(new SeparatorToken.RightParenthesisToken.Parser())
+                .build();
+
+        //comando -> comando APOS comando
+        Rule afterRule = new SequentialRule.Builder(Logger::logAnalysis)
+                .withRule(multiOptionCommandRule)
+                .withParser(new ThenOperatorToken.Parser())
+                .withRule(multiOptionCommandRule)
+                .build();
+
+        //comando -> comando ENTAO comando
+        Rule thenRule = new SequentialRule.Builder(Logger::logAnalysis)
+                .withRule(multiOptionCommandRule)
+                .withParser(new AfterOperatorToken.Parser())
+                .withRule(multiOptionCommandRule)
+                .build();
+
+        thenRuleDelegator.setDelegate(thenRule);
+        afterRuleDelegator.setDelegate(afterRule);
+        innerRuleDelegator.setDelegate(innerRule);
+
+        //Unica regra resultante 'S'
+        Rule masterRule = new MultiOptionRule.Builder(Logger::logAnalysis)
+                .orAccept(thenRule)
+                .orAccept(afterRule)
+                .orAccept(innerRule)
+                .orAccept(basicRule)
+                .build();
+
 
         for (Path path : listPaths) {
             Logger.lineBreak();

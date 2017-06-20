@@ -2,6 +2,7 @@ package br.unisinos.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Created by Vinicius, Fabio e Eduardo.
@@ -14,8 +15,8 @@ public class Utils {
 
     }
 
-    public static <T> List<List<T>> split(List<T> list) {
-        List<List<T>> lists = new ArrayList<>();
+    public static List<List<String>> split(List<String> list) {
+        List<List<String>> lists = new ArrayList<>();
         int lastSplit = 0;
         boolean splited = false;
         for (int i = 0; i < list.size(); i++) {
@@ -29,5 +30,13 @@ public class Utils {
             lists.add(list);
         }
         return lists;
+    }
+
+    public static String formatException(Throwable throwable) {
+        StringJoiner sj = new StringJoiner(System.lineSeparator() + "\t", throwable.getMessage() + System.lineSeparator(), "");
+        for (StackTraceElement ele : throwable.getStackTrace()) {
+            sj.add(ele.toString());
+        }
+        return sj.toString();
     }
 }

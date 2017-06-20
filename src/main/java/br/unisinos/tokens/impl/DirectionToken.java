@@ -45,10 +45,9 @@ public abstract class DirectionToken extends Token {
             if (INT_PATTERN.test(sb.toString())) {
                 return Optional.of(Direction.ofTokenType(type, Long.parseLong(sb.toString())));
             }
-        }
-        // by EPJ: Return to the mark if the token was not matched.
-        else
+        } else {
             input.moveTo(point);
+        }
 
         return Optional.empty();
     }
