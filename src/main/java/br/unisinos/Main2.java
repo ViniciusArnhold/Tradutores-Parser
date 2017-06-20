@@ -12,6 +12,8 @@ import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -50,7 +52,7 @@ public class Main2 {
         PARSERS = Collections.unmodifiableList(hParsers);
     }
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) throws IOException, URISyntaxException {
         // Arguments processing
         if (args.length == 0) {
             Logger.error(USAGE);
@@ -67,22 +69,25 @@ public class Main2 {
         }
 
         // Check file's consistency
+        Path pathFile = null;
+        List<Path> listPaths = new ArrayList<>();
         for (String file : files) {
-            Path path = Paths.get(file);
-            if (Files.notExists(path)) {
+            URL url = Main2.class.getResource("/" + file);
+            if (url == null || !Files.exists(pathFile = Paths.get(url.toURI()))) {
                 Logger.error("File doesnt exists");
                 Logger.error(file);
                 System.exit(1);
-            } else if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || !Files.isReadable(path)) {
+            } else if (!Files.isRegularFile(pathFile, LinkOption.NOFOLLOW_LINKS) || !Files.isReadable(pathFile)) {
                 Logger.error("Cant read file");
                 Logger.error(file);
                 System.exit(1);
             }
+            listPaths.add(pathFile);
         }
 
         HashMap<String, List<Token>> mapping = new HashMap<>();
 
-        for (Path path : Arrays.stream(files).map(Paths::get).collect(Collectors.toList())) {
+        for (Path path : listPaths) {
             Logger.lineBreak();
             Logger.warn("Parsing file: " + path.toAbsolutePath());
             List<Token> tokens = new ArrayList<>();

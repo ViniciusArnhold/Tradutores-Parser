@@ -5,7 +5,6 @@ import br.unisinos.MultiLineStringReader;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
-import br.unisinos.util.Logger;
 import br.unisinos.util.ParserUtils;
 
 import java.util.Optional;

@@ -1,0 +1,9 @@
+apply plugin: 'application'
+
+mainClassName = 'br.unisinos.Main2'
+
+run {
+    if (project.hasProperty("a")) {
+        args Eval.me(a as String)
+    }
+}

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="ProjetoTradutores:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/ProjetoTradutores_jar</output-path>
-    <root id="archive" name="ProjetoTradutores.jar">
-      <element id="module-output" name="ProjetoTradutores" />
-    </root>
-  </artifact>
-</component>

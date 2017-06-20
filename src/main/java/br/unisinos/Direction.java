@@ -1,19 +1,11 @@
 package br.unisinos;
 
 import br.unisinos.tokens.TokenType;
-import br.unisinos.tokens.impl.DirectionToken;
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
-import java.util.Optional;
 
 /**
  * Created by vinicius on 25/05/17.
  */
 public interface Direction {
-
-    Cardinal cardinalidade();
-
-    long amount();
 
     static Direction ofEast(long amount) {
         return new Simple(Cardinal.EAST, amount);
@@ -46,6 +38,17 @@ public interface Direction {
         }
     }
 
+    Cardinal cardinalidade();
+
+    long amount();
+
+    enum Cardinal {
+        NORTH,
+        WEST,
+        EAST,
+        SOUTH
+    }
+
     class Simple implements Direction {
 
         private final Cardinal cardinal;
@@ -70,13 +73,6 @@ public interface Direction {
         public String toString() {
             return String.format("%d", amount);
         }
-    }
-
-    enum Cardinal {
-        NORTH,
-        WEST,
-        EAST,
-        SOUTH
     }
 
 }
