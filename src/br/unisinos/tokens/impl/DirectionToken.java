@@ -5,6 +5,7 @@ import br.unisinos.MultiLineStringReader;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
+import br.unisinos.util.Logger;
 import br.unisinos.util.ParserUtils;
 
 import java.util.Optional;
@@ -27,10 +28,14 @@ public abstract class DirectionToken extends Token {
     private static Optional<Direction> tryParse(TokenType type, MultiLineStringReader input) {
         Point point = input.mark();
         int line = input.linePos();
+        // by EPJ: On the first time, the line will be -1 and the linePos will be always 0
+        if (line < 0)
+            line++;
 
         String text = ParserUtils.parseUntilWhitespace(input, true);
         if (text.equalsIgnoreCase(type.asTokenName())) {
-            if (input.skipWhitespace().length() != 0 || input.linePos() != line) {
+            // by EPJ: Adjusted to read after the token
+            if (input.skipWhitespace().length() == 0 || input.linePos() != line) {
                 input.moveTo(point);
                 return Optional.empty();
             }
@@ -42,6 +47,10 @@ public abstract class DirectionToken extends Token {
                 return Optional.of(Direction.ofTokenType(type, Long.parseLong(sb.toString())));
             }
         }
+        // by EPJ: Return to the mark if the token was not matched.
+        else
+            input.moveTo(point);
+
         return Optional.empty();
     }
 

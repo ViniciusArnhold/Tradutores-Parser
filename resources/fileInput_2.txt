@@ -1,3 +1,0 @@
-int x = 7;
-int y;
-char a[] = ;

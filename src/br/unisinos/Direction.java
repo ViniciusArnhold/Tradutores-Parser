@@ -65,6 +65,11 @@ public interface Direction {
         public long amount() {
             return amount;
         }
+
+        @Override
+        public String toString() {
+            return String.format("%d", amount);
+        }
     }
 
     enum Cardinal {
