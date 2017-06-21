@@ -1,0 +1,24 @@
+----- Gramática Solicitada -----
+C → C entao C
+C → C apos C
+C → (C)
+C → B
+B → frente n
+B → tras n
+B → direita n
+B → esqueda n
+----- Gramática Equivalente sem Recursão à Esquerda -----
+C → B entao B
+C → B entao (C)
+C → (C) entao B
+C → (C) entao (C)
+C → B apos B
+C → B apos (C)
+C → (C) apos B
+C → (C) apos (C)
+C → (C)
+C → B
+B → frente n
+B → tras n
+B → direita n
+B → esqueda n

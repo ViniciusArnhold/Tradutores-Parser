@@ -60,25 +60,21 @@ public class SyntaxParser {
         nodes.pollLast();
     }
 
+    private void clearParseNode()
+    {
+        nodes.clear();
+    }
+
     public boolean doParse() throws ParseException {
 
-        while (!reader.isEmpty()) {
-            Token next = peek();
-
-            if (isBasic(next)) {
-                parseBasic();
-                continue;
-            }
-
-            if (next.getType() == TokenType.L_PAREN) {
-                parseInner();
-                continue;
-            }
-
-            commandOp();
+        boolean parsed = true;
+        while (!reader.isEmpty() && parsed) {
+            parsed = C();
+            if (parsed)
+                clearParseNode();
         }
 
-        return true;
+        return parsed;
     }
 
     private void parseBasic() {
@@ -90,32 +86,104 @@ public class SyntaxParser {
         }
         logTokenParsed(next);
 
-        pollParseNode();
+        //pollParseNode();
     }
 
-    private void commandOp() {
+    private boolean C()
+    {
+
+        if (B())
+        {
+            // C -> B entao [B|(C)]
+            if (thenOrAfterBOrInnerC(TokenType.THEN_OP))
+                return true;
+            // C -> B apos [B|(C)]
+            else if (thenOrAfterBOrInnerC(TokenType.AFTER_OP))
+                return true;
+            // C -> B
+            return true;
+        }
+        else if (InnerC())
+        {
+            // C -> (C) entao [B|(C)]
+            if (thenOrAfterBOrInnerC(TokenType.THEN_OP))
+                return true;
+            // C -> (C) apos [B|(C)]
+            else if (thenOrAfterBOrInnerC(TokenType.AFTER_OP))
+                return true;
+            // C -> (C)
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean B()
+    {
+        if (reader.isEmpty())
+            return false;
+
         Token next = peek();
 
-        addParseNode("commandOp()");
-
-
-        if (isBasic(next)) {
+        if (isBasic(next))
+        {
             parseBasic();
-        } else if (next.getType() == TokenType.L_PAREN) {
-            parseInner();
+            return true;
         }
+        return false;
+    }
 
-        if (next.getType() == TokenType.THEN_OP) {
-            parseToken(TokenType.THEN_OP);
+    private boolean thenOrAfter(TokenType tokenType)
+    {
+        if (reader.isEmpty())
+            return false;
+
+        if (peek().getType() == tokenType)
+        {
+            //[then/after]
+            parseToken(tokenType);
+            return true;
         }
+        return false;
+    }
 
-        if (next.getType() == TokenType.AFTER_OP) {
-            parseToken(TokenType.AFTER_OP);
+    private boolean BOrInnerC()
+    {
+        if (B() || InnerC())
+            return true;
+        else
+            return false;
+    }
+
+    private boolean thenOrAfterBOrInnerC(TokenType tokenType)
+    {
+        if (reader.isEmpty())
+            return false;
+
+        Token next = peek();
+        if (peek().getType() == tokenType)
+        {
+            // [then|after] [B|(C)]
+            if (thenOrAfter(tokenType) && BOrInnerC())
+                return true;
+            else
+                throw new IllegalStateException(String.format("Expected some expression, but [%s] was found", next));
         }
+        return false;
+    }
 
-        commandOp();
+    private boolean InnerC() {
+        if (reader.isEmpty())
+            return false;
 
-        pollParseNode();
+        if (peek().getType() == TokenType.L_PAREN)
+        {
+            parseToken(TokenType.L_PAREN);
+            boolean v = C();
+            parseToken(TokenType.R_PAREN);
+            return v;
+        }
+        return false;
     }
 
     private boolean isBasic(Token token) {
@@ -130,17 +198,6 @@ public class SyntaxParser {
         }
     }
 
-
-    private void parseInner() {
-        addParseNode("parseInner()");
-
-        parseToken(TokenType.L_PAREN);
-        commandOp();
-        parseToken(TokenType.R_PAREN);
-
-        pollParseNode();
-    }
-
     private void parseToken(TokenType type) {
         addParseNode("parseInner(" + type + ")");
 
@@ -149,6 +206,6 @@ public class SyntaxParser {
             throw new IllegalStateException(String.format("Expected %s but found %s in [%s]", type, next.getType(), next));
         logTokenParsed(next);
 
-        pollParseNode();
+        //pollParseNode();
     }
 }

@@ -52,7 +52,7 @@ public class Main2 {
 
         hParsers.add(thenOperatorParser);
 
-        hParsers.add(thenOperatorParser);
+        //hParsers.add(thenOperatorParser);
         hParsers.add(afterOperatorParser);
 
         hParsers.add(rightToken);
