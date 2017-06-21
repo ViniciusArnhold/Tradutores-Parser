@@ -1,13 +1,15 @@
 package br.unisinos;
 
-import br.unisinos.analysis.AnalysisReport;
-import br.unisinos.analysis.rule.*;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenType;
 import br.unisinos.util.Logger;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Vinicius Pegorini Arnhold.
@@ -15,185 +17,29 @@ import java.util.*;
 public class SyntaxParser {
 
     private static List<Token> tokens;
-    private final RuleFactory ruleFactory;
-    private final TokenTypeRule leftRule;
-    private final TokenTypeRule forwardRule;
-    private final TokenTypeRule rightRule;
-    private final SequentialRule afterRule;
-    private final TokenTypeRule backRule;
-    private final MultiOptionRule basicRules;
-    private final MultiOptionRule multiOptionCommandRule;
-    private final SequentialRule innerRule;
-    private final SequentialRule thenRule;
-    private final MultiOptionRule masterRule;
     private final Deque<Token> reader;
-    private MultiOptionRule testBasicRules;
+    private Deque<String> nodes = new ArrayDeque<>();
 
     public SyntaxParser(Deque<Token> reader) {
         this.reader = reader;
-
-        ruleFactory = new RuleFactory()
-                .addReporter(Logger::logAnalysis)
-                .addReporter(SyntaxParser::collectToken);
-
-        //basico -> FRENTE n
-        forwardRule = ruleFactory.newTokenTypeRule(TokenType.FORWARD);
-
-        //basico -> ESQUERDA n
-        leftRule = ruleFactory.newTokenTypeRule(TokenType.LEFT);
-
-        //basico -> DIREITA n
-        rightRule = ruleFactory.newTokenTypeRule(TokenType.RIGHT);
-
-        //basico -> TRAS n
-        backRule = ruleFactory.newTokenTypeRule(TokenType.BACK);
-
-        //comando -> basico
-        basicRules = ruleFactory.newMultiRuleBuilder()
-                .orAccept(forwardRule)
-                .orAccept(leftRule)
-                .orAccept(rightRule)
-                .orAccept(backRule)
-                .build();
-
-        //Delegators servem para resolver ciclos.
-        DelegatingRule thenRuleDelegator = ruleFactory.newDelegatingRule();
-        DelegatingRule afterRuleDelegator = ruleFactory.newDelegatingRule();
-        DelegatingRule innerRuleDelegator = ruleFactory.newDelegatingRule();
-
-        //Aceita a primeira regra que funcionar
-        multiOptionCommandRule = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRules)
-                .orAccept(thenRuleDelegator)
-                .orAccept(afterRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .build();
-
-        //comando -> (comando)
-        innerRule = ruleFactory.newSequentialRuleBuilder()
-                .withToken(TokenType.L_PAREN)
-                .withRule(ruleFactory.newMultiRuleBuilder()
-                        .orAccept(basicRules)
-                        .orAccept(thenRuleDelegator)
-                        .orAccept(afterRuleDelegator)
-                        .orAccept(innerRuleDelegator)
-                        .build())
-                .withToken(TokenType.R_PAREN)
-                .build();
-
-        MultiOptionRule custom = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRules)
-                .orAccept(thenRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .orAccept(afterRuleDelegator)
-                .build();
-
-        //comando -> comando APOS comando
-        afterRule = ruleFactory.newSequentialRuleBuilder()
-                .withRule(custom)
-                .withToken(TokenType.AFTER_OP)
-                .withRule(custom)
-                .build();
-
-        custom = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRules)
-                .orAccept(afterRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .orAccept(thenRuleDelegator)
-                .build();
-
-        //comando -> comando ENTAO comando
-        thenRule = ruleFactory.newSequentialRuleBuilder()
-                .withRule(custom)
-                .withToken(TokenType.THEN_OP)
-                .withRule(custom)
-                .build();
-
-        thenRuleDelegator.setDelegate(thenRule);
-        afterRuleDelegator.setDelegate(afterRule);
-        innerRuleDelegator.setDelegate(innerRule);
-
-        //Unica regra resultante 'S'
-        masterRule = ruleFactory.newMultiRuleBuilder()
-                .orAccept(thenRule)
-                .orAccept(afterRule)
-                .orAccept(innerRule)
-                .orAccept(basicRules)
-                .build();
     }
 
-    private static void collectToken(AnalysisReport analysisReport) {
-        if (analysisReport.type() == AnalysisReport.Type.TOKEN) {
-            tokens.add(analysisReport.token());
-        }
-    }
 
     public static void parse(Deque<Token> es) {
         new SyntaxParser(es).doParse();
     }
 
-    private static void logTokenParsed(Token tok) {
-        Logger.info("Parsed [%s]", tok);
+    private void logTokenParsed(Token tok) {
+        Logger.info("On Seq [%s] - Token Parsed: [%s]", parseNodes(), tok);
     }
 
-    private static void logTokenParsed(TokenType tok) {
-        Logger.info("Parsed [%s]", tok);
+    private String parseNodes() {
+        return nodes.stream().collect(Collectors.joining(" -> "));
     }
 
-    public boolean doParse() throws ParseException {
-        testBasicRules = new RuleFactory()
-                .newMultiRuleBuilder()
-                .orAccept(forwardRule)
-                .orAccept(leftRule)
-                .orAccept(rightRule)
-                .orAccept(backRule)
-                .build();
-
-        while (!reader.isEmpty()) {
-            commandOp();
-        }
-
-        return true;
-    }
 
     private Deque<Token> dequeOf(Token... items) {
         return new ArrayDeque<>(Arrays.asList(items));
-    }
-
-    private void parseBasic() {
-        Token next = peek();
-        if (!basicRules.test(reader)) {
-            throw new IllegalStateException("Expected a basic token but found: " + (reader.isEmpty() ? "EOF" : reader.poll()) + " <- in -> " + reader);
-        }
-        logTokenParsed(next);
-    }
-
-    private void commandOp() {
-        Token next = peek();
-
-        if (isBasic(next)) {
-            parseBasic();
-            return;
-        }
-
-        if (next.getType() == TokenType.L_PAREN) {
-            parseInner();
-            return;
-        }
-
-        if (next.getType() == TokenType.THEN_OP) {
-            parseToken(TokenType.THEN_OP);
-        }
-
-        if (next.getType() == TokenType.AFTER_OP) {
-            parseToken(TokenType.AFTER_OP);
-        }
-
-        commandOp();
-    }
-
-    private boolean isBasic(Token token) {
-        return testBasicRules.test(new ArrayDeque<>(Collections.singleton(token)));
     }
 
     private Token peek() {
@@ -206,18 +52,103 @@ public class SyntaxParser {
         return reader.poll();
     }
 
+    private void addParseNode(String node) {
+        nodes.add(node);
+    }
+
+    private void pollParseNode() {
+        nodes.pollLast();
+    }
+
+    public boolean doParse() throws ParseException {
+
+        while (!reader.isEmpty()) {
+            Token next = peek();
+
+            if (isBasic(next)) {
+                parseBasic();
+                continue;
+            }
+
+            if (next.getType() == TokenType.L_PAREN) {
+                parseInner();
+                continue;
+            }
+
+            commandOp();
+        }
+
+        return true;
+    }
+
+    private void parseBasic() {
+        Token next = poll();
+        addParseNode("parseBasic(" + next + ")");
+
+        if (!isBasic(next)) {
+            throw new IllegalStateException("Expected a basic token but found: " + next + " <- in -> " + reader);
+        }
+        logTokenParsed(next);
+
+        pollParseNode();
+    }
+
+    private void commandOp() {
+        Token next = peek();
+
+        addParseNode("commandOp()");
+
+
+        if (isBasic(next)) {
+            parseBasic();
+        } else if (next.getType() == TokenType.L_PAREN) {
+            parseInner();
+        }
+
+        if (next.getType() == TokenType.THEN_OP) {
+            parseToken(TokenType.THEN_OP);
+        }
+
+        if (next.getType() == TokenType.AFTER_OP) {
+            parseToken(TokenType.AFTER_OP);
+        }
+
+        commandOp();
+
+        pollParseNode();
+    }
+
+    private boolean isBasic(Token token) {
+        switch (token.getType()) {
+            case FORWARD:
+            case LEFT:
+            case RIGHT:
+            case BACK:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
     private void parseInner() {
+        addParseNode("parseInner()");
+
         parseToken(TokenType.L_PAREN);
         commandOp();
         parseToken(TokenType.R_PAREN);
 
-
+        pollParseNode();
     }
 
     private void parseToken(TokenType type) {
+        addParseNode("parseInner(" + type + ")");
+
         Token next = poll();
         if (next.getType() != type)
             throw new IllegalStateException(String.format("Expected %s but found %s in [%s]", type, next.getType(), next));
         logTokenParsed(next);
+
+        pollParseNode();
     }
 }
