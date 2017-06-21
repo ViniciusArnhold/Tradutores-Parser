@@ -39,7 +39,7 @@ public class SequentialRule implements Rule {
         Set<Rule> rules = new LinkedHashSet<>();
         Consumer<AnalysisReport> reporter;
 
-        public Builder(Consumer<AnalysisReport> reporter) {
+        Builder(Consumer<AnalysisReport> reporter) {
             this.reporter = Objects.requireNonNull(reporter);
         }
 

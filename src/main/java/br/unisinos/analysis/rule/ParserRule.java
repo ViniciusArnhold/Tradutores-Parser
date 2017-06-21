@@ -12,7 +12,7 @@ public class ParserRule implements Rule {
     private final TokenParser<? extends Token> parser;
     private final Consumer<AnalysisReport> reporter;
 
-    public ParserRule(TokenParser<? extends Token> parser, Consumer<AnalysisReport> reporter) {
+    ParserRule(TokenParser<? extends Token> parser, Consumer<AnalysisReport> reporter) {
         this.reporter = reporter;
         this.parser = parser;
     }

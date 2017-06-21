@@ -43,16 +43,23 @@ public class Logger {
 
     public static void logAnalysis(AnalysisReport report) {
         StringBuilder sb = new StringBuilder(30);
+        sb.append(String.format("Change of state: FROM [%s], TO [%s] ", report.previousState(), report.currentState()))
+                .append(System.lineSeparator())
+                .append("TYPE : ");
         switch (report.type()) {
             case TOKEN:
+                sb.append(String.format("%s = [%s]", "TOKEN", report.token()));
                 break;
             case INFO:
+                sb.append(String.format("%s = [%s]", "INFO", report.info()));
                 break;
             case EXCEPTION:
+                sb.append(String.format("%s = [%s]", "EXCEPTION", report.exception()));
                 break;
             default:
                 throw new IllegalStateException(String.valueOf(report.type()));
         }
+        info(sb.toString());
     }
 
     public static void error(String message, Object... args) {

@@ -25,6 +25,11 @@ public interface AnalysisReport {
             }
 
             @Override
+            public Throwable exception() {
+                return throwable;
+            }
+
+            @Override
             public Type type() {
                 return Type.EXCEPTION;
             }
@@ -42,6 +47,11 @@ public interface AnalysisReport {
 
             @Override
             public String currentState() {
+                return message;
+            }
+
+            @Override
+            public String info() {
                 return message;
             }
 

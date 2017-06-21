@@ -44,7 +44,7 @@ public class MultiOptionRule implements Rule {
         private Set<Rule> rules = new LinkedHashSet<>();
         private Consumer<AnalysisReport> reporter;
 
-        public Builder(Consumer<AnalysisReport> reporter) {
+        Builder(Consumer<AnalysisReport> reporter) {
             this.reporter = Objects.requireNonNull(reporter);
         }
 
