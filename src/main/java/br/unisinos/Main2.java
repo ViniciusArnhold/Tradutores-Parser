@@ -8,6 +8,9 @@ import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
 import br.unisinos.tokens.impl.DirectionToken.EsquerdaToken;
 import br.unisinos.tokens.impl.DirectionToken.ForwardToken;
 import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
+import br.unisinos.tokens.impl.SeparatorToken;
+import br.unisinos.tokens.impl.SeparatorToken.LeftParenthesisToken;
+import br.unisinos.tokens.impl.SeparatorToken.RightParenthesisToken;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
@@ -34,6 +37,9 @@ public class Main2 {
     private static final TokenParser<? extends Token> upToken = new ForwardToken.Parser();
     private static final TokenParser<? extends Token> backToken = new BackToken.Parser();
 
+    private static final TokenParser<? extends Token> lParenParser = new LeftParenthesisToken.Parser();
+    private static final TokenParser<? extends Token> rParenParser = new RightParenthesisToken.Parser();
+
 
     private static final List<TokenParser<? extends Token>> PARSERS;
     private static final String USAGE = "USAGE: <--full> [files]+";
@@ -41,6 +47,11 @@ public class Main2 {
 
     static {
         List<TokenParser<? extends Token>> hParsers = new ArrayList<>();
+        hParsers.add(lParenParser);
+        hParsers.add(rParenParser);
+
+        hParsers.add(thenOperatorParser);
+
         hParsers.add(thenOperatorParser);
         hParsers.add(afterOperatorParser);
 
