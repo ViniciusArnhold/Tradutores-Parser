@@ -1,10 +1,10 @@
 package br.unisinos.analysis.rule;
 
-import br.unisinos.MultiLineStringReader;
 import br.unisinos.analysis.AnalysisReport;
 import br.unisinos.tokens.Token;
-import br.unisinos.tokens.TokenParser;
+import br.unisinos.tokens.TokenType;
 
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +25,7 @@ public class SequentialRule implements Rule {
     }
 
     @Override
-    public boolean test(MultiLineStringReader reader) {
+    public boolean test(Deque<Token> reader) {
         for (Rule rule : rules) {
             AnalysisReport report = AnalysisReport.fromMessage("Begin parsing with: " + rule, state);
             state = report.currentState();
@@ -43,8 +43,8 @@ public class SequentialRule implements Rule {
             this.reporter = Objects.requireNonNull(reporter);
         }
 
-        public Builder withParser(TokenParser<? extends Token> parser) {
-            return withRule(new ParserRule(parser, reporter));
+        public Builder withToken(TokenType tokType) {
+            return withRule(new TokenTypeRule(tokType, reporter));
         }
 
         public Builder withRule(Rule rule) {

@@ -1,8 +1,9 @@
 package br.unisinos.analysis.rule;
 
-import br.unisinos.MultiLineStringReader;
 import br.unisinos.analysis.AnalysisConsumer;
+import br.unisinos.tokens.Token;
 
+import java.util.Deque;
 import java.util.Objects;
 
 /**
@@ -23,7 +24,7 @@ public class DelegatingRule implements Rule {
     }
 
     @Override
-    public boolean test(MultiLineStringReader reader) {
+    public boolean test(Deque<Token> reader) {
         return ruleDelegate.test(reader);
     }
 }

@@ -1,8 +1,6 @@
 package br.unisinos.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * Created by Vinicius, Fabio e Eduardo.
@@ -30,6 +28,16 @@ public class Utils {
             lists.add(list);
         }
         return lists;
+    }
+
+    public static <T> void addAllFirst(Collection<T> col, Deque<T> deque) {
+        for (T item : col) {
+            deque.addFirst(item);
+        }
+    }
+
+    public static void checkNonEmpty(Collection<?> col) {
+        if (col.isEmpty()) throw new IllegalStateException("EmptyQueue");
     }
 
     public static String formatException(Throwable throwable) {

@@ -49,17 +49,19 @@ public class Logger {
         switch (report.type()) {
             case TOKEN:
                 sb.append(String.format("%s = [%s]", "TOKEN", report.token()));
+                warn(sb.toString());
                 break;
             case INFO:
                 sb.append(String.format("%s = [%s]", "INFO", report.info()));
+                info(sb.toString());
                 break;
             case EXCEPTION:
                 sb.append(String.format("%s = [%s]", "EXCEPTION", report.exception()));
+                error(sb.toString());
                 break;
             default:
                 throw new IllegalStateException(String.valueOf(report.type()));
         }
-        info(sb.toString());
     }
 
     public static void error(String message, Object... args) {

@@ -2,8 +2,7 @@ package br.unisinos.analysis.rule;
 
 import br.unisinos.analysis.AnalysisConsumer;
 import br.unisinos.analysis.AnalysisReport;
-import br.unisinos.tokens.Token;
-import br.unisinos.tokens.TokenParser;
+import br.unisinos.tokens.TokenType;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -25,8 +24,8 @@ public class RuleFactory {
         return this;
     }
 
-    public ParserRule newParserRule(TokenParser<? extends Token> parser) {
-        return new ParserRule(Objects.requireNonNull(parser), delegatingConsumer);
+    public TokenTypeRule newTokenTypeRule(TokenType parser) {
+        return new TokenTypeRule(Objects.requireNonNull(parser), delegatingConsumer);
     }
 
     public MultiOptionRule.Builder newMultiRuleBuilder() {

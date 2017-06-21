@@ -1,8 +1,9 @@
 package br.unisinos.analysis.rule;
 
-import br.unisinos.MultiLineStringReader;
 import br.unisinos.analysis.AnalysisReport;
+import br.unisinos.tokens.Token;
 
+import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -30,12 +31,7 @@ public class MultiOptionRule implements Rule {
      * otherwise {@code false}
      */
     @Override
-    public boolean test(MultiLineStringReader reader) {
-        for (Rule rule : rules) {
-            AnalysisReport report = AnalysisReport.fromMessage("Begin parsing with: " + rule, state);
-            state = report.currentState();
-            reporter.accept(report);
-        }
+    public boolean test(Deque<Token> reader) {
         return rules.stream().anyMatch(r -> r.test(reader));
     }
 

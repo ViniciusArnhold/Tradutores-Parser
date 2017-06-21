@@ -1,8 +1,5 @@
 package br.unisinos;
 
-import br.unisinos.analysis.rule.DelegatingRule;
-import br.unisinos.analysis.rule.Rule;
-import br.unisinos.analysis.rule.RuleFactory;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
@@ -11,7 +8,6 @@ import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
 import br.unisinos.tokens.impl.DirectionToken.EsquerdaToken;
 import br.unisinos.tokens.impl.DirectionToken.ForwardToken;
 import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
-import br.unisinos.tokens.impl.SeparatorToken;
 import br.unisinos.util.Logger;
 import br.unisinos.util.Utils;
 
@@ -91,96 +87,6 @@ public class Main2 {
 
         HashMap<String, List<Token>> mapping = new HashMap<>();
 
-        RuleFactory ruleFactory = new RuleFactory();
-        ruleFactory.addReporter(Logger::logAnalysis);
-
-        //basico -> FRENTE n
-        Rule forwardRule = ruleFactory.newParserRule(new ForwardToken.Parser());
-
-        //basico -> ESQUERDA n
-        Rule leftRule = ruleFactory.newParserRule(new EsquerdaToken.Parser());
-
-        //basico -> DIREITA n
-        Rule rightRule = ruleFactory.newParserRule(new DireitaToken.Parser());
-
-        //basico -> TRAS n
-        Rule backRule = ruleFactory.newParserRule(new BackToken.Parser());
-
-        //comando -> basico
-        Rule basicRule = ruleFactory.newMultiRuleBuilder()
-                .orAccept(forwardRule)
-                .orAccept(leftRule)
-                .orAccept(rightRule)
-                .orAccept(backRule)
-                .build();
-
-
-        //Delegators servem para resolver ciclos.
-        DelegatingRule thenRuleDelegator = ruleFactory.newDelegatingRule();
-        DelegatingRule afterRuleDelegator = ruleFactory.newDelegatingRule();
-        DelegatingRule innerRuleDelegator = ruleFactory.newDelegatingRule();
-
-        //Aceita a primeira regra que funcionar
-        Rule multiOptionCommandRule = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRule)
-                .orAccept(thenRuleDelegator)
-                .orAccept(afterRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .build();
-
-        //comando -> (comando)
-        Rule innerRule = ruleFactory.newSequentialRuleBuilder()
-                .withParser(new SeparatorToken.LeftParenthesisToken.Parser())
-                .withRule(ruleFactory.newMultiRuleBuilder()
-                        .orAccept(basicRule)
-                        .orAccept(thenRuleDelegator)
-                        .orAccept(afterRuleDelegator)
-                        .orAccept(innerRuleDelegator)
-                        .build())
-                .withParser(new SeparatorToken.RightParenthesisToken.Parser())
-                .build();
-
-        Rule custom = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRule)
-                .orAccept(thenRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .orAccept(afterRuleDelegator)
-                .build();
-
-        //comando -> comando APOS comando
-        Rule afterRule = ruleFactory.newSequentialRuleBuilder()
-                .withRule(custom)
-                .withParser(new ThenOperatorToken.Parser())
-                .withRule(custom)
-                .build();
-
-        custom = ruleFactory.newMultiRuleBuilder()
-                .orAccept(basicRule)
-                .orAccept(afterRuleDelegator)
-                .orAccept(innerRuleDelegator)
-                .orAccept(thenRuleDelegator)
-                .build();
-
-        //comando -> comando ENTAO comando
-        Rule thenRule = ruleFactory.newSequentialRuleBuilder()
-                .withRule(custom)
-                .withParser(new AfterOperatorToken.Parser())
-                .withRule(custom)
-                .build();
-
-        thenRuleDelegator.setDelegate(thenRule);
-        afterRuleDelegator.setDelegate(afterRule);
-        innerRuleDelegator.setDelegate(innerRule);
-
-        //Unica regra resultante 'S'
-        Rule masterRule = ruleFactory.newMultiRuleBuilder()
-                .orAccept(thenRule)
-                .orAccept(afterRule)
-                .orAccept(innerRule)
-                .orAccept(basicRule)
-                .build();
-
-
         for (Path path : listPaths) {
             Logger.lineBreak();
             Logger.warn("Parsing file: " + path.toAbsolutePath());
@@ -203,7 +109,7 @@ public class Main2 {
                         input.nextLine();
                     }
                     input.skipWhitespace();
-                    Logger.warn("Rule result " + basicRule.test(input));
+                    tryParseAny(input, tokens);
                 }
 
                 String text = list.stream().collect(Collectors.joining(System.lineSeparator()));
@@ -232,6 +138,12 @@ public class Main2 {
                         .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()))));
 
         Logger.lineBreak();
+
+        Logger.warn("Begin Syntax Parser");
+        for (Map.Entry<String, List<Token>> entry : mapping.entrySet()) {
+            Logger.warn("Begin analysis of : " + entry.getKey());
+            SyntaxParser.parse(new ArrayDeque<>(entry.getValue()));
+        }
         Logger.lineBreak();
         Logger.lineBreak();
         Logger.warn("Program ran sucefully.");
