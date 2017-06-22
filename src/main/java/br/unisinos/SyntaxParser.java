@@ -68,8 +68,10 @@ public class SyntaxParser {
         while (!reader.isEmpty() && parsed) {
             List<Token> cmds = new ArrayList<>();
             parsed = C(cmds);
-            if (parsed)
+            if (parsed) {
+                cmdsParsed.addAll(cmdsParsed.size(), cmds);
                 clearParseNode();
+            }
         }
 
         return parsed;
@@ -225,9 +227,8 @@ public class SyntaxParser {
         if (!((p < list.size()) && (p > 0)))
             throw new IllegalStateException("Error on mirroring a list.");
 
-        List<Token> l1 = list.subList(0, p);
-        List<Token> l2 = list.subList(p, list.size());
-        list = new ArrayList<>(l1);
+        List<Token> l2 = new ArrayList<>(list.subList(p, list.size()));
+        list.removeAll(l2);
         list.addAll(0, l2);
     }
 }
