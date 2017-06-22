@@ -8,7 +8,6 @@ import br.unisinos.tokens.impl.DirectionToken.DireitaToken;
 import br.unisinos.tokens.impl.DirectionToken.EsquerdaToken;
 import br.unisinos.tokens.impl.DirectionToken.ForwardToken;
 import br.unisinos.tokens.impl.OperatorToken.AfterOperatorToken;
-import br.unisinos.tokens.impl.SeparatorToken;
 import br.unisinos.tokens.impl.SeparatorToken.LeftParenthesisToken;
 import br.unisinos.tokens.impl.SeparatorToken.RightParenthesisToken;
 import br.unisinos.util.Logger;
@@ -152,7 +151,8 @@ public class Main2 {
 
         Logger.warn("Begin Syntax Parser");
         for (Map.Entry<String, List<Token>> entry : mapping.entrySet()) {
-            Logger.warn("Begin analysis of : " + entry.getKey());
+            Logger.warn("Begin analysis of : ");
+            Logger.warn(entry.getKey());
             SyntaxParser.parse(new ArrayDeque<>(entry.getValue()));
         }
         Logger.lineBreak();
@@ -169,7 +169,6 @@ public class Main2 {
                 return;
             }
         }
-
 
         parseFailCount++;
         // By EPJ: Throw an expection because no token was matched.

@@ -3,6 +3,7 @@ package br.unisinos;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenType;
+import br.unisinos.translator.Evaluator;
 import br.unisinos.util.Logger;
 
 import java.util.*;
@@ -73,6 +74,14 @@ public class SyntaxParser {
                 clearParseNode();
             }
         }
+
+        Logger.lineBreak();
+        Logger.warn("Arquivo possui sintaxe correta, iniciando eval");
+        Logger.lineBreak();
+
+        Evaluator evaluator = Evaluator.create();
+        evaluator.eval(cmdsParsed);
+
 
         return parsed;
     }
