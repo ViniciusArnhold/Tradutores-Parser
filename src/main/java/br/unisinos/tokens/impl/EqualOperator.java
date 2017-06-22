@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public class EqualOperator extends Token {
     private EqualOperator(Object value) {

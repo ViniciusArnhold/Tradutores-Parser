@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public enum TokenType {
 

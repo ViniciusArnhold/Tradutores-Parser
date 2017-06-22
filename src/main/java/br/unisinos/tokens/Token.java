@@ -3,7 +3,7 @@ package br.unisinos.tokens;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public abstract class Token {
 

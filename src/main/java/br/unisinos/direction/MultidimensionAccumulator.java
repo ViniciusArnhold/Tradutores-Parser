@@ -5,33 +5,30 @@ import javafx.geometry.Point2D;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.stream.LongStream;
 
 /**
- * Created by vinicius on 25/05/17.
+ * Created by Vinicius, Fabio e Eduardo.
  */
 public class MultidimensionAccumulator {
 
     private final Queue<Direction> moves = new LinkedList<>();
 
     public MultidimensionAccumulator accumulateLeft(long amount) {
-        moves.add(Direction.left(amount));
-        return this;
+        return accumulate(Direction.left(amount));
     }
 
     public MultidimensionAccumulator accumulateRight(long amount) {
-        moves.add(Direction.right(amount));
-        return this;
+        return accumulate(Direction.right(amount));
     }
 
     public MultidimensionAccumulator accumulateUp(long amount) {
-        moves.add(Direction.forward(amount));
-        return this;
+        return accumulate(Direction.forward(amount));
     }
 
 
     public MultidimensionAccumulator accumulateDown(long amount) {
-        moves.add(Direction.back(amount));
-        return this;
+        return accumulate(Direction.back(amount));
     }
 
     public MultidimensionAccumulator accumulate(Direction direction) {

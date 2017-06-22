@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public class Logger {
 

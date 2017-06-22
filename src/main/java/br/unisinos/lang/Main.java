@@ -22,7 +22,7 @@ import static br.unisinos.tokens.impl.SeparatorToken.*;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 class Main {
 

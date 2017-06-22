@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import static br.unisinos.MultiLineStringReader.Point;
 
 /**
- * Created by vinicius on 01/06/17.
+ * Created by Vinicius, Fabio e Eduardo.
  */
 public abstract class DirectionToken extends Token {
 

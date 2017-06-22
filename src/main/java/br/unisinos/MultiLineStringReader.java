@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 @SuppressWarnings("unused")
 public class MultiLineStringReader {

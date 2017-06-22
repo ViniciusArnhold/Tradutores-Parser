@@ -4,6 +4,6 @@ mainClassName = 'br.unisinos.direction.Main'
 
 run {
     if (project.hasProperty("a")) {
-        args = Eval.me(a)
+        args a.toString().split(' ')
     }
 }

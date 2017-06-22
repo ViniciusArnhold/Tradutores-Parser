@@ -151,6 +151,7 @@ $RECYCLE.BIN/
 
 # Gradle:
 .idea/**/gradle.xml
+.gradle/
 .idea/**/libraries
 
 # Mongo Explorer plugin:

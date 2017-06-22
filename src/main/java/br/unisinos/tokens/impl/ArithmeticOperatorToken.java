@@ -12,7 +12,7 @@ import static br.unisinos.tokens.TokenType.ARITHMETIC_OP;
 /**
  * Created by Vinicius, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public class ArithmeticOperatorToken extends Token {
     private ArithmeticOperatorToken(Object value) {

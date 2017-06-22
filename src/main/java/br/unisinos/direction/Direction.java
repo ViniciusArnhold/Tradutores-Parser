@@ -3,7 +3,7 @@ package br.unisinos.direction;
 import br.unisinos.tokens.TokenType;
 
 /**
- * Created by vinicius on 25/05/17.
+ * Created by Vinicius, Fabio e Eduardo.
  */
 public interface Direction {
 

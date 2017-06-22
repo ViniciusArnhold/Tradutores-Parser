@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tradutores-Parser.iml" filepath="$PROJECT_DIR$/.idea/modules/Tradutores-Parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Java-Tradutores-Parser.iml" filepath="$PROJECT_DIR$/.idea/modules/Java-Tradutores-Parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tradutores-Parser.iml" filepath="$PROJECT_DIR$/Tradutores-Parser.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tradutores-Parser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Tradutores-Parser_main.iml" group="Tradutores-Parser" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Tradutores-Parser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Tradutores-Parser_test.iml" group="Tradutores-Parser" />
     </modules>

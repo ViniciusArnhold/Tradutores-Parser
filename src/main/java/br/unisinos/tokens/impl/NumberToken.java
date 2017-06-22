@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Vinicius, Fabio e Eduardo, Fabio e Eduardo, Fabio e Eduardo.
  *
- * @since ${PROJECT_VERSION}
+ * @since 1.0
  */
 public class NumberToken extends Token {
 
