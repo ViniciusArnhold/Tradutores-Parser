@@ -7,46 +7,46 @@ import br.unisinos.tokens.TokenType;
  */
 public interface Direction {
 
-    static Direction ofEast(long amount) {
-        return new Simple(Cardinal.EAST, amount);
+    static Direction right(long amount) {
+        return new Simple(Cardinal.RIGHT, amount);
     }
 
-    static Direction ofWest(long amount) {
-        return new Simple(Cardinal.WEST, amount);
+    static Direction left(long amount) {
+        return new Simple(Cardinal.LEFT, amount);
     }
 
-    static Direction ofNorth(long amount) {
-        return new Simple(Cardinal.NORTH, amount);
+    static Direction forward(long amount) {
+        return new Simple(Cardinal.FORWARD, amount);
     }
 
-    static Direction ofSouth(long amount) {
-        return new Simple(Cardinal.SOUTH, amount);
+    static Direction back(long amount) {
+        return new Simple(Cardinal.BACK, amount);
     }
 
     static Direction ofTokenType(TokenType type, long amount) {
         switch (type) {
             case FORWARD:
-                return ofNorth(amount);
+                return forward(amount);
             case LEFT:
-                return ofWest(amount);
+                return left(amount);
             case RIGHT:
-                return ofEast(amount);
+                return right(amount);
             case BACK:
-                return ofSouth(amount);
+                return back(amount);
             default:
                 throw new IllegalArgumentException("type");
         }
     }
 
-    Cardinal cardinalidade();
+    Cardinal cardinality();
 
     long amount();
 
     enum Cardinal {
-        NORTH,
-        WEST,
-        EAST,
-        SOUTH
+        FORWARD,
+        LEFT,
+        RIGHT,
+        BACK
     }
 
     class Simple implements Direction {
@@ -60,7 +60,7 @@ public interface Direction {
         }
 
         @Override
-        public Cardinal cardinalidade() {
+        public Cardinal cardinality() {
             return cardinal;
         }
 

@@ -47,7 +47,7 @@ public abstract class Token {
      * @return a string representation of the object.
      */
     @Override
-    public final String toString() {
+    public String toString() {
         return String.format(TO_STRING_FMT, type.asTokenName(), value);
     }
 }

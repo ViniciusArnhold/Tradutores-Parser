@@ -14,21 +14,21 @@ import java.util.stream.Collectors;
  */
 public class SyntaxParser {
 
-    private final Deque<Token>  reader;
-    private Deque<String>       nodes = new ArrayDeque<>();
-    private final List<Token>   cmdsParsed = new ArrayList<>();
+    private final Deque<Token> reader;
+    private Deque<String> nodes = new ArrayDeque<>();
+    private final List<Token> cmdsParsed = new ArrayList<>();
 
     public SyntaxParser(Deque<Token> reader) {
         this.reader = reader;
     }
 
 
-    public static void parse(Deque<Token> es) {
-        new SyntaxParser(es).doParse();
+    public static boolean parse(Deque<Token> es) {
+        return new SyntaxParser(es).doParse();
     }
 
     private void logTokenParsed(Token tok) {
-        Logger.info("On Seq [%s] - Token Parsed: [%s]", parseNodes(), tok);
+        Logger.info("On Seq [%s] - Parsed: [%s]", parseNodes(), tok);
     }
 
     private String parseNodes() {
@@ -54,21 +54,18 @@ public class SyntaxParser {
         nodes.add(node);
     }
 
-    private void pollParseNode() {
-        nodes.pollLast();
-    }
-
-    private void clearParseNode()
-    {
+    private void clearParseNode() {
         nodes.clear();
     }
 
-    public boolean doParse() throws ParseException {
+    private boolean doParse() throws ParseException {
 
         boolean parsed = true;
         while (!reader.isEmpty() && parsed) {
             List<Token> cmds = new ArrayList<>();
+            addParseNode("C");
             parsed = C(cmds);
+            clearParseNode();
             if (parsed) {
                 cmdsParsed.addAll(cmdsParsed.size(), cmds);
                 clearParseNode();
@@ -82,40 +79,35 @@ public class SyntaxParser {
         Evaluator evaluator = Evaluator.create();
         evaluator.eval(cmdsParsed);
 
-
         return parsed;
     }
 
     private void parseBasic(List<Token> cmds) {
         Token next = poll();
-        addParseNode("parseBasic(" + next + ")");
 
+        addParseNode("basic(" + next.toString() + ")");
+        logTokenParsed(next);
         if (!isBasic(next)) {
             throw new IllegalStateException("Expected a basic token but found: " + next + " <- in -> " + reader);
         }
-        logTokenParsed(next);
         cmds.add(next);
     }
 
-    private boolean C(List<Token> cmds)
-    {
-        if (B(cmds))
-        {
+    private boolean C(List<Token> cmds) {
+        if (B(cmds)) {
             // C -> B entao [B|(C)]
             if (thenOrAfterBOrInnerC(TokenType.THEN_OP, cmds))
                 return true;
-            // C -> B apos [B|(C)]
+                // C -> B apos [B|(C)]
             else if (thenOrAfterBOrInnerC(TokenType.AFTER_OP, cmds))
                 return true;
             // C -> B
             return true;
-        }
-        else if (InnerC(cmds))
-        {
+        } else if (InnerC(cmds)) {
             // C -> (C) entao [B|(C)]
             if (thenOrAfterBOrInnerC(TokenType.THEN_OP, cmds))
                 return true;
-            // C -> (C) apos [B|(C)]
+                // C -> (C) apos [B|(C)]
             else if (thenOrAfterBOrInnerC(TokenType.AFTER_OP, cmds))
                 return true;
             // C -> (C)
@@ -125,28 +117,25 @@ public class SyntaxParser {
         return false;
     }
 
-    private boolean B(List<Token> cmds)
-    {
+    private boolean B(List<Token> cmds) {
         if (reader.isEmpty())
             return false;
 
         Token next = peek();
 
-        if (isBasic(next))
-        {
+        if (isBasic(next)) {
             parseBasic(cmds);
             return true;
         }
         return false;
     }
 
-    private boolean thenOrAfter(TokenType tokenType, List<Token> cmds)
-    {
+    private boolean thenOrAfter(TokenType tokenType, List<Token> cmds) {
         if (reader.isEmpty())
             return false;
 
-        if (peek().getType() == tokenType)
-        {
+        if (peek().getType() == tokenType) {
+            addParseNode("B " + tokenType + " ( B | (C) )");
             //[then/after]
             parseToken(tokenType);
             return true;
@@ -154,22 +143,16 @@ public class SyntaxParser {
         return false;
     }
 
-    private boolean BOrInnerC(List<Token> cmds)
-    {
-        if (B(cmds) || InnerC(cmds))
-            return true;
-        else
-            return false;
+    private boolean BOrInnerC(List<Token> cmds) {
+        return B(cmds) || InnerC(cmds);
     }
 
-    private boolean thenOrAfterBOrInnerC(TokenType tokenType, List<Token> cmds)
-    {
+    private boolean thenOrAfterBOrInnerC(TokenType tokenType, List<Token> cmds) {
         if (reader.isEmpty())
             return false;
 
         Token next = peek();
-        if (peek().getType() == tokenType)
-        {
+        if (peek().getType() == tokenType) {
             // [then|after] [B|(C)]
             if (thenOrAfter(tokenType, cmds)) {
                 int curIndex = -1;
@@ -194,9 +177,9 @@ public class SyntaxParser {
         if (reader.isEmpty())
             return false;
 
-        if (peek().getType() == TokenType.L_PAREN)
-        {
+        if (peek().getType() == TokenType.L_PAREN) {
             parseToken(TokenType.L_PAREN);
+            addParseNode("( C )");
             // Create a new list
             List<Token> newCmds = new ArrayList<>();
             boolean v = C(newCmds);
@@ -221,16 +204,13 @@ public class SyntaxParser {
     }
 
     private void parseToken(TokenType type) {
-        addParseNode("parseInner(" + type + ")");
 
         Token next = poll();
         if (next.getType() != type)
             throw new IllegalStateException(String.format("Expected %s but found %s in [%s]", type, next.getType(), next));
-        logTokenParsed(next);
     }
 
-    private void mirrorList(List<Token> list, int p)
-    {
+    private void mirrorList(List<Token> list, int p) {
         Objects.requireNonNull(list);
 
         if (!((p < list.size()) && (p > 0)))

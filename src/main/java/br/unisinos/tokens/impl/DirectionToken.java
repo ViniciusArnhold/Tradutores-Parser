@@ -1,7 +1,7 @@
 package br.unisinos.tokens.impl;
 
-import br.unisinos.direction.Direction;
 import br.unisinos.MultiLineStringReader;
+import br.unisinos.direction.Direction;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
 import br.unisinos.tokens.TokenType;
@@ -22,6 +22,11 @@ public abstract class DirectionToken extends Token {
 
     protected DirectionToken(TokenType type, Direction direction) {
         super(type, direction);
+    }
+
+    @Override
+    public String toString() {
+        return getType() + " " + getValue();
     }
 
     private static Optional<Direction> tryParse(TokenType type, MultiLineStringReader input) {

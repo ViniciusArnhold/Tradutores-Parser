@@ -14,23 +14,23 @@ public class MultidimensionAccumulator {
     private final Queue<Direction> moves = new LinkedList<>();
 
     public MultidimensionAccumulator accumulateLeft(long amount) {
-        moves.add(Direction.ofWest(amount));
+        moves.add(Direction.left(amount));
         return this;
     }
 
     public MultidimensionAccumulator accumulateRight(long amount) {
-        moves.add(Direction.ofEast(amount));
+        moves.add(Direction.right(amount));
         return this;
     }
 
     public MultidimensionAccumulator accumulateUp(long amount) {
-        moves.add(Direction.ofNorth(amount));
+        moves.add(Direction.forward(amount));
         return this;
     }
 
 
     public MultidimensionAccumulator accumulateDown(long amount) {
-        moves.add(Direction.ofSouth(amount));
+        moves.add(Direction.back(amount));
         return this;
     }
 
@@ -49,17 +49,17 @@ public class MultidimensionAccumulator {
 
         while (!moves.isEmpty()) {
             Direction direction;
-            switch ((direction = moves.poll()).cardinalidade()) {
-                case NORTH:
+            switch ((direction = moves.poll()).cardinality()) {
+                case FORWARD:
                     point2D = point2D.add(0, direction.amount());
                     break;
-                case WEST:
+                case LEFT:
                     point2D = point2D.add(-direction.amount(), 0);
                     break;
-                case EAST:
+                case RIGHT:
                     point2D = point2D.add(direction.amount(), 0);
                     break;
-                case SOUTH:
+                case BACK:
                     point2D = point2D.add(0, -direction.amount());
                     break;
                 default:
@@ -73,7 +73,7 @@ public class MultidimensionAccumulator {
         Queue<Direction> moves = new LinkedList<>(this.moves);
         Direction direction;
         while ((direction = moves.poll()) != null) {
-            Logger.info("Moved: [ " + direction.cardinalidade() + " ] Ammount: [ " + direction.amount() + " ] ");
+            Logger.info("Moved: [ " + direction.cardinality() + " ] Ammount: [ " + direction.amount() + " ] ");
         }
     }
 

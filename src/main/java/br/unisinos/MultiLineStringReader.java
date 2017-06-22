@@ -23,12 +23,7 @@ public class MultiLineStringReader {
         this.curLinha = -1;
         this.curColuna = -1;
         // by EPJ: Remove all lines with no content.
-        Iterator<String> it = linhas.iterator();
-        while (it.hasNext())
-        {
-            if (it.next().length() == 0)
-                it.remove();
-        }
+        linhas.removeIf(s -> s.length() == 0);
 
         this.linhas = Collections.unmodifiableList(linhas);
         this.ultimaLinha = linhas.size() - 1;

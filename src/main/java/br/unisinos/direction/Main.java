@@ -153,7 +153,8 @@ public class Main {
         Logger.warn("Begin Syntax Parser");
         for (Map.Entry<String, List<Token>> entry : mapping.entrySet()) {
             Logger.warn("Begin analysis of : ");
-            Logger.warn(entry.getKey());
+            Logger.info(entry.getKey());
+            Logger.lineBreak();
             SyntaxParser.parse(new ArrayDeque<>(entry.getValue()));
 
             Logger.lineBreak();
