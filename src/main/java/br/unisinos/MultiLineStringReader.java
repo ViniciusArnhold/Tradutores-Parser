@@ -43,7 +43,7 @@ public class MultiLineStringReader {
         return new MultiLineStringReader(Arrays.asList(str.split(System.lineSeparator())));
     }
 
-    static MultiLineStringReader of(List<String> lists) {
+    public static MultiLineStringReader of(List<String> lists) {
         return new MultiLineStringReader(lists);
     }
 
@@ -52,7 +52,7 @@ public class MultiLineStringReader {
         return !isLineDone();
     }
 
-    boolean hasMoreLines() {
+    public boolean hasMoreLines() {
         return curLinha < ultimaLinha;
     }
 
@@ -154,7 +154,7 @@ public class MultiLineStringReader {
         return sb.toString();
     }
 
-    void nextLine() {
+    public void nextLine() {
         if (!hasMoreLines()) {
             throw new IllegalStateException("Reader doesn't have more lines");
         }

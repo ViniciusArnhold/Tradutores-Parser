@@ -1,4 +1,4 @@
-package br.unisinos;
+package br.unisinos.direction;
 
 import br.unisinos.tokens.TokenType;
 

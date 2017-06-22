@@ -1,7 +1,5 @@
 package br.unisinos.util;
 
-import br.unisinos.analysis.AnalysisReport;
-
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,29 +37,6 @@ public class Logger {
 
     public static void warn(String message, Object... args) {
         LOGGER.warn(message, args);
-    }
-
-    public static void logAnalysis(AnalysisReport report) {
-        StringBuilder sb = new StringBuilder(30);
-        sb.append(String.format("Change of state: FROM [%s], TO [%s] ", report.previousState(), report.currentState()))
-                .append(System.lineSeparator())
-                .append("TYPE : ");
-        switch (report.type()) {
-            case TOKEN:
-                sb.append(String.format("%s = [%s]", "TOKEN", report.token()));
-                warn(sb.toString());
-                break;
-            case INFO:
-                sb.append(String.format("%s = [%s]", "INFO", report.info()));
-                info(sb.toString());
-                break;
-            case EXCEPTION:
-                sb.append(String.format("%s = [%s]", "EXCEPTION", report.exception()));
-                error(sb.toString());
-                break;
-            default:
-                throw new IllegalStateException(String.valueOf(report.type()));
-        }
     }
 
     public static void error(String message, Object... args) {

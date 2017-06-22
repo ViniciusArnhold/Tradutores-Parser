@@ -1,4 +1,4 @@
-package br.unisinos;
+package br.unisinos.lang;
 
 /**
  * Created by Vinicius, Fabio e Eduardo.

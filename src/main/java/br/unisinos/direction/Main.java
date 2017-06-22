@@ -1,5 +1,6 @@
-package br.unisinos;
+package br.unisinos.direction;
 
+import br.unisinos.MultiLineStringReader;
 import br.unisinos.parse.ParseException;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 import static br.unisinos.tokens.impl.OperatorToken.ThenOperatorToken;
 
-public class Main2 {
+public class Main {
     private static final TokenParser<? extends Token> thenOperatorParser =
             new ThenOperatorToken.Parser();
     private static final TokenParser<? extends Token> afterOperatorParser =
@@ -82,7 +83,7 @@ public class Main2 {
         Path pathFile = null;
         List<Path> listPaths = new ArrayList<>();
         for (String file : files) {
-            URL url = Main2.class.getResource("/" + file);
+            URL url = Main.class.getResource("/" + file);
             if (url == null || !Files.exists(pathFile = Paths.get(url.toURI()))) {
                 Logger.error("File doesnt exists");
                 Logger.error(file);
@@ -154,9 +155,10 @@ public class Main2 {
             Logger.warn("Begin analysis of : ");
             Logger.warn(entry.getKey());
             SyntaxParser.parse(new ArrayDeque<>(entry.getValue()));
+
+            Logger.lineBreak();
+            Logger.lineBreak();
         }
-        Logger.lineBreak();
-        Logger.lineBreak();
         Logger.warn("Program ran sucefully.");
     }
 

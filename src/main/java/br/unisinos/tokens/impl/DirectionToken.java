@@ -1,6 +1,6 @@
 package br.unisinos.tokens.impl;
 
-import br.unisinos.Direction;
+import br.unisinos.direction.Direction;
 import br.unisinos.MultiLineStringReader;
 import br.unisinos.tokens.Token;
 import br.unisinos.tokens.TokenParser;

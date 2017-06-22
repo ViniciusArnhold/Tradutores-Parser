@@ -1,7 +1,7 @@
 package br.unisinos.translator;
 
-import br.unisinos.Direction;
-import br.unisinos.MultidimensionAccumulator;
+import br.unisinos.direction.Direction;
+import br.unisinos.direction.MultidimensionAccumulator;
 import br.unisinos.tokens.Token;
 import br.unisinos.util.Logger;
 import javafx.geometry.Point2D;
